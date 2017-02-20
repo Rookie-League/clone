@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+                        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool" lazy-init="false">
+        <constructor-arg name="poolConfig" ref="redisPoolConfig"/>
+        <constructor-arg name="host" value="${redis.ip}"/>
+        <constructor-arg name="port" value="${redis.port}"/>
+        <constructor-arg name="password" value="${redis.password}"/>
+        <constructor-arg name="database" value="${redis.db}"/>
+        <constructor-arg name="timeout" value="${redis.timeout}"/>
+    </bean>
+    <bean id="redisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!-- 最大链接数 -->
+        <property name="maxTotal" value="${redis.maxTotal}"/>
+        <!-- 最大空闲链接数 -->
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <!-- 最小空闲链接数 -->
+        <property name="minIdle" value="${redis.minIdle}"/>
+        <!-- 链接数耗尽是否阻塞 -->
+        <property name="blockWhenExhausted" value="${redis.blockWhenExhausted}"/>
+        <!-- 逐出连接的最小空闲时间 默认1800000毫秒(30分钟) -->
+        <property name="minEvictableIdleTimeMillis" value="${redis.minEvictableIdleTimeMillis}"/>
+        <!-- 逐出扫描的时间间隔(毫秒) 如果为负数,则不运行逐出线程, 默认-1 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${redis.timeBetweenEvictionRunsMillis}"/>
+        <!-- 每次逐出检查时 逐出的最大数目 如果为负数就是 : 1/abs(n), 默认3 -->
+        <property name="numTestsPerEvictionRun" value="${redis.numTestsPerEvictionRun}"/>
+        <!-- 在空闲时检查有效性, 默认false -->
+        <property name="testWhileIdle" value="${redis.testWhileIdle}"/>
+    </bean>
+
+</beans>

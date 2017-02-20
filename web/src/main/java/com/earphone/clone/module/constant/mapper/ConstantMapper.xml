@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.earphone.clone.module.constant.mapper.ConstantMapper">
+	<cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true" />
+	
+	<sql id="totalcolumns">
+		id,
+		`key`,
+		`value`,
+		remark,
+		hierarchy,
+		oper_time operTime,
+		oper_user operUser
+	</sql>
+	
+	<select id="findByKey" resultType="com.earphone.clone.module.constant.domain.Constant" useCache="true">
+		SELECT
+			<include refid="totalcolumns"></include>
+		FROM constant
+		WHERE `key` = #{key}
+  	</select>
+  	
+  	<select id="findChildListByHierarchy" resultType="com.earphone.clone.module.constant.domain.Constant">
+		SELECT
+			<include refid="totalcolumns"></include>
+		FROM constant
+		WHERE hierarchy = #{hierarchy}
+  	</select>
+  	
+  	<select id="findNoCacheByKey" resultType="com.earphone.clone.module.constant.domain.Constant" useCache="false">
+		SELECT
+			<include refid="totalcolumns"></include>
+		FROM constant
+		WHERE `key` = #{key}
+  	</select>
+	
+</mapper>

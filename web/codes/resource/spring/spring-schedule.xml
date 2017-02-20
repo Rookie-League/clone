@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+                        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!-- 启动触发器的配置开始 -->
+    <!--  线程池（执行器） -->
+    <!--<bean id="quartzJobFactory" class="com.earphone.schedule.quartz.SpringQuartzJobFactory"/>-->
+    <bean id="quartzJobSchedulingListener" class="com.earphone.clone.listener.CloneJobListener"/>
+    <bean id="startQuertz" lazy-init="true" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="jobFactory" value="com.earphone.schedule.quartz.SpringQuartzJobFactory"/>
+        <property name="configLocation" value="classpath*:/properties/quartz.properties"/>
+        <property name="applicationContextSchedulerContextKey" value="applicationContextKey"/>
+    </bean>
+    <!-- 启动触发器的配置结束 -->
+
+</beans>

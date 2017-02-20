@@ -1,0 +1,117 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>web</artifactId>
+    <version>${project.parent.version}</version>
+
+    <parent>
+        <groupId>com.littlearphone</groupId>
+        <artifactId>clone</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <maven.tomcat.version>2.2</maven.tomcat.version>
+        <maven.tomcat.port>8888</maven.tomcat.port>
+
+        <maven.jetty.version>9.3.14.v20161028</maven.jetty.version>
+        <maven.jetty.port>9999</maven.jetty.port>
+        <maven.jetty.stopkey>foo</maven.jetty.stopkey>
+        <maven.jetty.stopport>9997</maven.jetty.stopport>
+        <maven.jetty.scaninterval>10</maven.jetty.scaninterval>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.littlearphone</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!--spring boot core-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- tag::tests[] -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- end::tests[] -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <!--<webappDirectory>${basedir}/target/ROOT</webappDirectory>-->
+                    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+                    <!--使用WebApplicationInitializer启动-->
+                    <!--<webResources>
+                        <resource>
+                            <directory>${basedir}/src/main/webapp</directory>
+                            <filtering>true</filtering>
+                            <includes>
+                                <include>**/web.xml</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                    <webXml>codes/web.xml</webXml>-->
+                </configuration>
+            </plugin>
+            <!-- tomcat7插件 -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${maven.tomcat.version}</version>
+                <configuration>
+                    <server>tomcat7</server>
+                    <port>${maven.tomcat.port}</port>
+                    <path>/${project.name}</path>
+                    <uriEncoding>${project.encoding}</uriEncoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- 使用eclipse的jetty能更好的支持java8，配置参考如下地址 -->
+                <!-- http://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html -->
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty.version}</version>
+                <configuration>
+                    <stopKey>${maven.jetty.stopkey}</stopKey>
+                    <stopPort>${maven.jetty.stopport}</stopPort>
+                    <scanIntervalSeconds>${maven.jetty.scaninterval}</scanIntervalSeconds>
+                    <httpConnector>
+                        <!--jetty启动端口号 -->
+                        <port>${maven.jetty.port}</port>
+                    </httpConnector>
+                    <!--<webApp>
+                        <contextPath>/</contextPath>
+                    </webApp>-->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
