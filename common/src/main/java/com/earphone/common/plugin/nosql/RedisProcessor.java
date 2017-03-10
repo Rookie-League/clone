@@ -9,13 +9,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.earphone.common.constant.ListOrder;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.earphone.common.plugin.pagination.PageEntity.ListOrder;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;

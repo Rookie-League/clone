@@ -1,13 +1,11 @@
 package com.earphone.clone.module.constant.mapper;
 
-import java.util.List;
-
 import com.earphone.clone.module.constant.domain.Constant;
-import com.earphone.common.plugin.pagination.PageEntity;
+import org.apache.ibatis.annotations.Param;
 
 /**
- * @description TODO
  * @author yaojiamin
+ * @description TODO
  * @createTime 2016-6-8 上午10:08:07
  */
 public interface ConstantMapper {
@@ -17,21 +15,5 @@ public interface ConstantMapper {
      * @fileName ConstantMapper.java
      * @author yaojiamin
      */
-    Constant findByKey ( String key );
-
-    /**
-     * @description TODO
-     * @createTime 2016-6-8 上午10:08:13
-     * @fileName ConstantMapper.java
-     * @author yaojiamin
-     */
-    List<Constant> findChildListByHierarchy ( PageEntity<Constant> page );
-
-    /**
-     * @description TODO
-     * @createTime 2016-6-8 上午10:08:14
-     * @fileName ConstantMapper.java
-     * @author yaojiamin
-     */
-    Constant findNoCacheByKey ( String key );
+    Constant findByKey(@Param("key") String key);
 }

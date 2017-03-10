@@ -1,0 +1,9 @@
+*.idea
+*.iml
+/.settings
+/.classpath
+/.mymetadata
+/.project
+/target
+/src/main/webapp/WEB-INF/classes
+/logs

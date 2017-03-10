@@ -16,7 +16,6 @@
         <quartz.version>2.2.1</quartz.version>
         <cglib.version>3.1</cglib.version>
         <druid.version>1.0.13</druid.version>
-        <mybatis.spring.version>1.0.0</mybatis.spring.version>
         <logback.ext.spring>0.1.4</logback.ext.spring>
 
         <commons.io.version>2.4</commons.io.version>
@@ -39,11 +38,6 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <!-- end::aop[] -->
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${mybatis.spring.version}</version>
-        </dependency>
         <!-- jedis dependencies -->
         <dependency>
             <groupId>redis.clients</groupId>

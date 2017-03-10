@@ -1,12 +1,14 @@
 package com.earphone.clone.module.common.controller;
 
 import com.earphone.aop.annotation.LogPoint;
+import com.earphone.clone.module.constant.service.ConstantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,6 +23,9 @@ public class CommonController implements ErrorController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private static final String PATH = "/error";
+
+    @Resource
+    private ConstantService constantService;
 
     @Override
     public String getErrorPath() {
@@ -42,6 +47,7 @@ public class CommonController implements ErrorController {
     @RequestMapping("/test")
     @LogPoint("test")
     public Object test() throws Exception {
+        constantService.findByKey("666");
         return "test";
     }
 }

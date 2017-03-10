@@ -20,6 +20,8 @@
         <maven.jetty.stopkey>foo</maven.jetty.stopkey>
         <maven.jetty.stopport>9997</maven.jetty.stopport>
         <maven.jetty.scaninterval>10</maven.jetty.scaninterval>
+
+        <mybatis.spring.version>1.2.0</mybatis.spring.version>
     </properties>
 
     <dependencies>
@@ -40,9 +42,28 @@
             <scope>test</scope>
         </dependency>
         <!-- end::tests[] -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis.spring.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
+        <!--这个元素描述了项目相关的所有资源路径列表，例如和项目相关的属性文件，这些资源被包含在最终的打包文件里。-->
+        <resources>
+            <resource>
+                <!--描述存放资源的目录，该路径相对POM路径-->
+                <directory>src/main/java</directory>
+                <includes>
+                    <!--如果在源码路径有配置文件需要管理，一定要配置这个-->
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

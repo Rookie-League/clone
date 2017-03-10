@@ -17,8 +17,4 @@ public class ConstantService {
     public Constant findByKey(String key) {
         return constantMapper.findByKey(key);
     }
-
-    public Constant findNoCacheByKey(String key) {
-        return constantMapper.findNoCacheByKey(key);
-    }
 }
