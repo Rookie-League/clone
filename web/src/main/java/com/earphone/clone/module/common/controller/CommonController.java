@@ -1,7 +1,10 @@
 package com.earphone.clone.module.common.controller;
 
 import com.earphone.aop.annotation.LogPoint;
+import com.earphone.clone.module.common.request.TestRequest;
 import com.earphone.clone.module.constant.service.ConstantService;
+import com.earphone.utility.utils.JSONUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorController;
@@ -46,8 +49,10 @@ public class CommonController implements ErrorController {
 
     @RequestMapping("/test")
     @LogPoint("test")
-    public Object test() throws Exception {
-        constantService.findByKey("666");
+    public Object test(TestRequest request) throws Exception {
+        logger.info(new ObjectMapper().writeValueAsString(request));
+        logger.info(JSONUtils.toJSON(constantService.findByKey("666")));
+        logger.info(JSONUtils.toJSON(constantService.findHierarchy("|0|")));
         return "test";
     }
 }

@@ -22,7 +22,6 @@ import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletResponse;
 
 import com.earphone.common.constant.Charset;
-import net.sf.json.JSONObject;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -94,11 +93,11 @@ public class WebUtils {
 
     public static String post(String url, Map<String, Object> args, Map<String, String> headers)
             throws Exception {
-        logger.info("PostURL={}#Arguments={}", new Object[]{url, JSONObject.fromObject(args)});
+        logger.info("PostURL={}#Arguments={}", new Object[]{url, JSONUtils.toJSON(args)});
         trustAllHosts();
         PostMethod postMethod = initialWithHeader(url, headers);
         if (Objects.nonNull(args) && !args.isEmpty()) {
-            postMethod.setRequestBody(args.entrySet().stream().map(entry -> new NameValuePair(entry.getKey(), JSONObject.fromObject(entry.getValue()).toString())).collect(Collectors.toList()).toArray(new NameValuePair[0]));
+            postMethod.setRequestBody(args.entrySet().stream().map(entry -> new NameValuePair(entry.getKey(), JSONUtils.toJSON(entry.getValue()))).collect(Collectors.toList()).toArray(new NameValuePair[0]));
         }
         httpClient.executeMethod(postMethod);
         try {

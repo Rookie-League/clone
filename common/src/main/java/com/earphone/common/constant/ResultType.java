@@ -7,19 +7,21 @@ package com.earphone.common.constant;
  * @createTime 16:35
  */
 public enum ResultType {
-    SUCCESS("success", 0), FAILURE("failure", 1);
+    FAILURE("FAILURE", -1),
+    SUCCESS("SUCCESS", 0);
+
     private String message;
-    private int value;
+    private Integer value;
 
     public String getMessage() {
         return message;
     }
 
-    public int getValue() {
+    public Integer getValue() {
         return value;
     }
 
-    ResultType(String message, int value) {
+    ResultType(String message, Integer value) {
         this.message = message;
         this.value = value;
     }

@@ -1,5 +1,5 @@
+import com.earphone.aop.wrapper.ResultWrapper;
 import com.earphone.common.constant.ResultType;
-import net.sf.json.JSONObject;
 
 import org.junit.BeforeClass;
 import org.slf4j.Logger;
@@ -9,7 +9,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 
-import com.earphone.common.constant.Constants;
 import com.earphone.utility.validation.Assert;
 
 import java.util.Objects;
@@ -31,8 +30,8 @@ public class TestBasic {
      * @fileName TestBasic.java
      * @author yaojiamin
      */
-    protected void assertThis(Object response, String message) {
-        Assert.wrapString(JSONObject.fromObject(response).getString(Constants.CODE)).equals(ResultType.SUCCESS.getMessage(), message);
+    protected void assertThis(ResultWrapper response, String message) {
+        Assert.wrapObject(response.getType()).equals(ResultType.SUCCESS, message);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.earphone.clone.config;
 
-import com.earphone.aop.aspect.LogAspect;
+import com.earphone.aop.aspect.ResultWrappAspect;
 import com.earphone.clone.interceptor.RequestLogInterceptor;
 import com.earphone.common.constant.Charset;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -51,8 +51,8 @@ public class SpringMVCConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public LogAspect logAspect() {
-        return new LogAspect();
+    public ResultWrappAspect logAspect() {
+        return new ResultWrappAspect();
     }
 
     @Bean

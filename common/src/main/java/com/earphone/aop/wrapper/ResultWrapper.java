@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  */
 @JsonInclude(Include.NON_NULL)
 public class ResultWrapper {
-    private ResultWrapper(WrapperBuilder builder) {
+    private ResultWrapper(ResultWrapperBuilder builder) {
         setType(builder.type);
         setResult(builder.result);
         setError(builder.error);
@@ -24,6 +24,10 @@ public class ResultWrapper {
     private Object result;
     private String error;
 
+    public ResultType getType() {
+        return type;
+    }
+
     public Integer getCode() {
         return getType().getValue();
     }
@@ -32,32 +36,28 @@ public class ResultWrapper {
         return getType().getMessage();
     }
 
-    public ResultType getType() {
-        return type;
-    }
-
-    private void setType(ResultType type) {
-        this.type = type;
-    }
-
     public Object getResult() {
         return result;
-    }
-
-    private void setResult(Object result) {
-        this.result = result;
     }
 
     public String getError() {
         return error;
     }
 
+    private void setType(ResultType type) {
+        this.type = type;
+    }
+
+    private void setResult(Object result) {
+        this.result = result;
+    }
+
     private void setError(String error) {
         this.error = error;
     }
 
-    public static class WrapperBuilder {
-        public WrapperBuilder() {
+    public static class ResultWrapperBuilder {
+        public ResultWrapperBuilder() {
             setType(ResultType.SUCCESS);
         }
 
@@ -65,17 +65,17 @@ public class ResultWrapper {
         private Object result;
         private String error;
 
-        public WrapperBuilder setType(ResultType type) {
+        public ResultWrapperBuilder setType(ResultType type) {
             this.type = type;
             return this;
         }
 
-        public WrapperBuilder setResult(Object result) {
+        public ResultWrapperBuilder setResult(Object result) {
             this.result = result;
             return this;
         }
 
-        public WrapperBuilder setError(String error) {
+        public ResultWrapperBuilder setError(String error) {
             this.error = error;
             return this;
         }

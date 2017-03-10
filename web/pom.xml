@@ -12,6 +12,11 @@
     </parent>
 
     <properties>
+        <mapper.version>1.1.0</mapper.version>
+        <pagehelper.version>1.1.0</pagehelper.version>
+        <persistence.api.version>1.0</persistence.api.version>
+        <mybatis.typehandler.version>1.0.1</mybatis.typehandler.version>
+
         <maven.tomcat.version>2.2</maven.tomcat.version>
         <maven.tomcat.port>8888</maven.tomcat.port>
 
@@ -43,6 +48,28 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-typehandlers-jsr310</artifactId>
+            <version>${mybatis.typehandler.version}</version>
+        </dependency>
+        <!--mapper-->
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-spring-boot-starter</artifactId>
+            <version>${mapper.version}</version>
+        </dependency>
+        <!--pagehelper-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>${persistence.api.version}</version>
         </dependency>
     </dependencies>
 

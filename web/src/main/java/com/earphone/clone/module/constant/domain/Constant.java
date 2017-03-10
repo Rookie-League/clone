@@ -1,90 +1,97 @@
 package com.earphone.clone.module.constant.domain;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.time.LocalDateTime;
+
 /**
- * 
- * ClassName: Constant 
- * @Description: 常量
- * @author cyb
- * @date 2016-4-5
+ * ClassName: Constant
  */
+@Table(name = "constant")
 public class Constant {
-	private Integer id;
-	
-	/**
-	 * 常量的键，会在程序中声明，已用于获取value或者子常量
-	 */
-	private String key;
-	
-	/**
-	 * 常量的值
-	 */
-	private String value;
-	
-	/**
-	 * 备注
-	 */
-	private String remark;
-	
-	private Long operTime;
-	
-	private String operUser;
-	
-	private String hierarchy;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	public Integer getId() {
-		return id;
-	}
+    /**
+     * 常量的键，会在程序中声明，已用于获取value或者子常量
+     */
+    @Column(name = "`key`")
+    private String key;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    /**
+     * 常量的值
+     */
+    @Column(name = "`value`")
+    private String value;
 
-	public String getKey() {
-		return key;
-	}
+    /**
+     * 备注
+     */
+    private String remark;
 
-	public void setKey(String key) {
-		this.key = key;
-	}
+    private LocalDateTime operTime;
 
-	public String getValue() {
-		return value;
-	}
+    private String operUser;
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    private String hierarchy;
 
-	public String getRemark() {
-		return remark;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public Long getOperTime() {
-		return operTime;
-	}
+    public String getKey() {
+        return key;
+    }
 
-	public void setOperTime(Long operTime) {
-		this.operTime = operTime;
-	}
+    public void setKey(String key) {
+        this.key = key;
+    }
 
-	public String getOperUser() {
-		return operUser;
-	}
+    public String getValue() {
+        return value;
+    }
 
-	public void setOperUser(String operUser) {
-		this.operUser = operUser;
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	public String getHierarchy() {
-		return hierarchy;
-	}
+    public String getRemark() {
+        return remark;
+    }
 
-	public void setHierarchy(String hierarchy) {
-		this.hierarchy = hierarchy;
-	}
-	
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public LocalDateTime getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(LocalDateTime operTime) {
+        this.operTime = operTime;
+    }
+
+    public String getOperUser() {
+        return operUser;
+    }
+
+    public void setOperUser(String operUser) {
+        this.operUser = operUser;
+    }
+
+    public String getHierarchy() {
+        return hierarchy;
+    }
+
+    public void setHierarchy(String hierarchy) {
+        this.hierarchy = hierarchy;
+    }
 }

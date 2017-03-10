@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.earphone.common.constant.ListOrder;
-import net.sf.json.JSONObject;
+import com.earphone.utility.utils.JSONUtils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -113,7 +113,7 @@ public class RedisProcessor {
     }
 
     public boolean setObject(String key, Object object, int expire) {
-        return Objects.nonNull(object) && set(key, JSONObject.fromObject(object).toString(), expire);
+        return Objects.nonNull(object) && set(key, JSONUtils.toJSON(object), expire);
     }
 
     public boolean setExpire(String key, int expire) {
