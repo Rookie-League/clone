@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.littlearphone</groupId>
         <artifactId>clone</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -20,8 +20,6 @@
         <maven.jetty.stopkey>foo</maven.jetty.stopkey>
         <maven.jetty.stopport>9997</maven.jetty.stopport>
         <maven.jetty.scaninterval>10</maven.jetty.scaninterval>
-
-        <mybatis.spring.version>1.2.0</mybatis.spring.version>
     </properties>
 
     <dependencies>
@@ -45,7 +43,6 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${mybatis.spring.version}</version>
         </dependency>
     </dependencies>
 

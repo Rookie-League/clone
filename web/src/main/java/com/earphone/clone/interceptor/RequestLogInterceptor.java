@@ -4,6 +4,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -22,7 +23,7 @@ public class RequestLogInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 //        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        logger.info("STATUS={}#URI={}#ARGUMENTS={}", response.getStatus(), getRequestURI(request), request.getParameterMap());
+        logger.info("STATUS={}#URI={}#ARGUMENTS={}", response.getStatus(), getRequestURI(request), JSONObject.fromObject(request.getParameterMap()));
         return true;
     }
 
