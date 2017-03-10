@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * @createTime 2015-12-2 下午5:05:52
  */
 @Aspect
-public class ResultWrappAspect {
+public class ResultWrapAspect {
     // 日志对象
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     // 切面表达式
