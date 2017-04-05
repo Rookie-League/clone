@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.earphone.common.constant.ListOrder;
-import com.earphone.utility.utils.JSONUtils;
+import com.earphone.common.utils.JSONUtils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,8 +20,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-
-import javax.annotation.Resource;
 
 /**
  * @author yaojiamin

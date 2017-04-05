@@ -1,9 +1,9 @@
 package com.earphone.clone.module.common.controller;
 
-import com.earphone.aop.annotation.LogPoint;
+import com.earphone.wrapper.annotation.LogPoint;
 import com.earphone.clone.module.common.request.TestRequest;
 import com.earphone.clone.module.constant.service.ConstantService;
-import com.earphone.utility.utils.JSONUtils;
+import com.earphone.common.utils.JSONUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

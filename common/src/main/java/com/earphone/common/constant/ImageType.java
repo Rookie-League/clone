@@ -1,6 +1,6 @@
 package com.earphone.common.constant;
 
-import com.earphone.utility.utils.ByteUtils;
+import com.earphone.common.utils.ByteUtils;
 
 import java.util.HashMap;
 import java.util.Map;

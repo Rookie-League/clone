@@ -7,6 +7,7 @@
         <artifactId>clone</artifactId>
         <version>0.0.2-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <artifactId>common</artifactId>
     <version>${project.parent.version}</version>
@@ -26,17 +27,11 @@
     </properties>
 
     <dependencies>
-        <!--spring-->
+        <!-- servlet dependencies -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
-        <!-- tag::aop[] -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <!-- end::aop[] -->
         <!-- jedis dependencies -->
         <dependency>
             <groupId>redis.clients</groupId>
@@ -49,19 +44,10 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
         </dependency>
-        <!-- aop dependencies -->
+        <!-- com.earphone.wrapperpper dependencies -->
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
-        </dependency>
-        <!-- quartz dependencies -->
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz-jobs</artifactId>
         </dependency>
         <!-- logging dependencies -->
         <dependency>

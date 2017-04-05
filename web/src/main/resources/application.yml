@@ -7,7 +7,7 @@ spring :
 #   resources :
 #       static-locations : [/static/**]
 # SpringAOP配置
-    aop :
+    com.earphone.aop :
 # Add @EnableAspectJAutoProxy
         auto : true
 # Whether subclass-based (CGLIB) proxies are to be created (true) as opposed to standard Java interface-based proxies (false)

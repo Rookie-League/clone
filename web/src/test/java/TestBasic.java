@@ -1,4 +1,4 @@
-import com.earphone.aop.wrapper.ResultWrapper;
+import com.earphone.wrapper.wrapper.ResultWrapper;
 import com.earphone.common.constant.ResultType;
 
 import org.junit.BeforeClass;
@@ -9,7 +9,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 
-import com.earphone.utility.validation.Assert;
+import com.earphone.common.validation.Assert;
 
 import java.util.Objects;
 

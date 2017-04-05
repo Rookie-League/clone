@@ -1,6 +1,6 @@
 package com.earphone.clone.config;
 
-import com.earphone.aop.aspect.ResultWrapAspect;
+import com.earphone.wrapper.aspect.ResultWrapAspect;
 import com.earphone.clone.interceptor.RequestLogInterceptor;
 import com.earphone.common.constant.Charset;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

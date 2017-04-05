@@ -28,9 +28,29 @@
     </properties>
 
     <dependencies>
+        <!-- servlet dependencies -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <!-- db dependencies -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.littlearphone</groupId>
             <artifactId>common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.littlearphone</groupId>
+            <artifactId>schedule</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.littlearphone</groupId>
+            <artifactId>wrapper</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!--spring boot core-->
