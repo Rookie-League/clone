@@ -92,6 +92,7 @@ public abstract class BasicSchedulingListener implements ApplicationListener<Con
         return createCronTrigger(period, createTriggerBuilder(name));
     }
 
+    //解析触发间隔Key,从数据库或配置文件或其他来源获取key代表的真实表达式
     protected abstract String parsePeriodKey(String periodKey);
 
     private SimpleTrigger createSimpleTrigger(Long interval, TriggerBuilder<Trigger> triggerBuilder) {

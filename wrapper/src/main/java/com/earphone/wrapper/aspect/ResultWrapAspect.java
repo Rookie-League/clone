@@ -1,5 +1,6 @@
 package com.earphone.wrapper.aspect;
 
+import com.earphone.wrapper.annotation.LogPoint;
 import com.earphone.wrapper.wrapper.ResultWrapper.ResultWrapperBuilder;
 import com.earphone.common.constant.ResultType;
 import com.earphone.common.exception.NonCaptureException;
@@ -8,8 +9,11 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Method;
 
 /**
  * @author yaojiamin
@@ -29,6 +33,8 @@ public class ResultWrapAspect {
     //@AfterThrowing(value = CUT_EXPRESSION, throwing = "exception")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
+            Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+            logger.info("Invoke:{}", method.getAnnotation(LogPoint.class).value());
             return new ResultWrapperBuilder().setResult(joinPoint.proceed(joinPoint.getArgs())).builder();
         } catch (NonCaptureException e) {
             return new ResultWrapperBuilder().setType(ResultType.FAILURE).builder();
@@ -39,7 +45,7 @@ public class ResultWrapAspect {
     }
 
     @AfterReturning(value = CUT_EXPRESSION, returning = "result")
-    public void around(Object result) throws Throwable {
+    public void after(Object result) throws Throwable {
         logger.info("Return:{}", JSONUtils.toJSON(result));
     }
 }
