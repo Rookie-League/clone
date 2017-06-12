@@ -5,6 +5,7 @@ import com.earphone.wrapper.wrapper.ResultWrapper.ResultWrapperBuilder;
 import com.earphone.common.constant.ResultType;
 import com.earphone.common.exception.NonCaptureException;
 import com.earphone.common.utils.JSONUtils;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
@@ -34,8 +35,13 @@ public class ResultWrapAspect {
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
             Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
-            logger.info("Invoke:{}", method.getAnnotation(LogPoint.class).value());
-            return new ResultWrapperBuilder().setResult(joinPoint.proceed(joinPoint.getArgs())).builder();
+            LogPoint annotation = method.getAnnotation(LogPoint.class);
+            logger.info("Invoke:{}", annotation.value());
+            Object result = joinPoint.proceed(joinPoint.getArgs());
+            if (annotation.wrapped()) {
+                return new ResultWrapperBuilder().setResult(result).builder();
+            }
+            return result;
         } catch (NonCaptureException e) {
             return new ResultWrapperBuilder().setType(ResultType.FAILURE).builder();
         } catch (Throwable e) {
@@ -45,7 +51,22 @@ public class ResultWrapAspect {
     }
 
     @AfterReturning(value = CUT_EXPRESSION, returning = "result")
-    public void after(Object result) throws Throwable {
-        logger.info("Return:{}", JSONUtils.toJSON(result));
+    public void after(JoinPoint joinPoint, Object result) throws Throwable {
+        if (notBasicType(result)) {
+            logger.info("Return:{}", JSONUtils.toJSON(result));
+        } else {
+            logger.info("Return:{}", result);
+        }
+    }
+
+    private boolean notBasicType(Object result) {
+        if (result instanceof String) return false;
+        if (result instanceof Integer) return false;
+        if (result instanceof Long) return false;
+        if (result instanceof Short) return false;
+        if (result instanceof Double) return false;
+        if (result instanceof Float) return false;
+        if (result instanceof Character) return false;
+        return !(result instanceof Boolean);
     }
 }
