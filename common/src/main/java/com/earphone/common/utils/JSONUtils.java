@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * @createDate 2017/3/10
  * @createTime 11:01
  */
-public class JSONUtils {
+public final class JSONUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(JSONUtils.class);
 
     private JSONUtils() {
