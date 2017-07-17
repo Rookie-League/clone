@@ -21,22 +21,31 @@ public class ObjectWrapper<T> {
         this.object = object;
     }
 
-    void isTrue(boolean condition, String description) {
-        if (condition) return;
+    ObjectWrapper<T> isTrue(boolean condition, String description) {
+        if (condition) {
+            return this;
+        }
         throw new NonCaptureException(description);
     }
 
-    public void equals(T target, String description) {
+    public ObjectWrapper<T> equals(T target, String description) {
         T source = getSource();
-        isTrue(Objects.isNull(source) ? Objects.isNull(target) : source.equals(target), description);
+        return isTrue(Objects.isNull(source) ? Objects.isNull(target) : source.equals(target), description);
     }
 
-    public void isEmpty(String description) {
-        isTrue(Objects.isNull(getSource()) || invokeEmptyMethod(getSource()), description);
+    public ObjectWrapper<T> notEquals(T target, String description) {
+        T source = getSource();
+        return isTrue(Objects.isNull(source) ? Objects.nonNull(target) : source.equals(target), description);
     }
 
-    public void isNotEmpty(String description) {
-        isTrue(Objects.nonNull(getSource()) && !invokeEmptyMethod(getSource()), description);
+    public ObjectWrapper<T> isEmpty(String description) {
+        T source = getSource();
+        return isTrue(Objects.isNull(source) || invokeEmptyMethod(source), description);
+    }
+
+    public ObjectWrapper<T> isNotEmpty(String description) {
+        T source = getSource();
+        return isTrue(Objects.nonNull(source) && !invokeEmptyMethod(source), description);
     }
 
     boolean invokeEmptyMethod(T source) {

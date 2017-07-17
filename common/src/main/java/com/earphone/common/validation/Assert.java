@@ -10,12 +10,20 @@ import java.util.Map;
  */
 public class Assert {
 
+    private Assert() {
+
+    }
+
     public static ObjectWrapper<Object> wrapObject(Object object) {
         return new ObjectWrapper<>(object);
     }
 
     public static BooleanWrapper wrapBoolean(Boolean object) {
         return new BooleanWrapper(object);
+    }
+
+    public static <T extends Number> NumberWrapper wrapNumber(T object) {
+        return new NumberWrapper(object);
     }
 
     public static <T extends CharSequence> StringWrapper wrapString(T object) {

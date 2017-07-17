@@ -18,7 +18,27 @@ public class StringWrapper extends ObjectWrapper<CharSequence> {
         return source.length() == 0;
     }
 
-    public void isNotBlank(String description) {
-        isTrue(StringUtils.isNoneBlank(getSource()), description);
+    public StringWrapper isNotBlank(String description) {
+        return (StringWrapper) isTrue(StringUtils.isNoneBlank(getSource()), description);
+    }
+
+    @Override
+    public StringWrapper equals(CharSequence target, String description) {
+        return (StringWrapper) super.equals(target, description);
+    }
+
+    @Override
+    public StringWrapper notEquals(CharSequence target, String description) {
+        return (StringWrapper) super.notEquals(target, description);
+    }
+
+    @Override
+    public StringWrapper isEmpty(String description) {
+        return (StringWrapper) super.isEmpty(description);
+    }
+
+    @Override
+    public StringWrapper isNotEmpty(String description) {
+        return (StringWrapper) super.isNotEmpty(description);
     }
 }
