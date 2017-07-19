@@ -199,9 +199,9 @@
                 <version>3.0.1</version>
                 <configuration>
                     <!-- 设置分析工作的等级，可以为Min、Default和Max -->
-                    <effort>Default</effort>
+                    <effort>Max</effort>
                     <!-- Low、Medium和High (Low最严格) -->
-                    <threshold>High</threshold>
+                    <threshold>Low</threshold>
                     <findbugsXmlOutput>true</findbugsXmlOutput>
                     <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
                     <xmlOutput>true</xmlOutput>
@@ -211,21 +211,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.1</version>
-                <configuration>
-                    <findbugsXmlOutput>true</findbugsXmlOutput>
-                    <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-                    <xmlOutput>true</xmlOutput>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
 
     <!-- 设定主仓库，按设定顺序进行查找。 -->
     <repositories>
