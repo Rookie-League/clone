@@ -193,6 +193,22 @@
                     <compilerVersion>${maven.compiler.version}</compilerVersion>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <!-- 设置分析工作的等级，可以为Min、Default和Max -->
+                    <effort>Default</effort>
+                    <!-- Low、Medium和High (Low最严格) -->
+                    <threshold>High</threshold>
+                    <findbugsXmlOutput>true</findbugsXmlOutput>
+                    <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+                    <xmlOutput>true</xmlOutput>
+                    <!--findbugs需要忽略的错误的配置文件-->
+                    <!--<excludeFilterFile>findbugs/findbugs-exclude-filter.xml</excludeFilterFile>-->
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -203,8 +219,6 @@
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>3.0.1</version>
                 <configuration>
-                    <threshold>High</threshold>
-                    <effort>Default</effort>
                     <findbugsXmlOutput>true</findbugsXmlOutput>
                     <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
                     <xmlOutput>true</xmlOutput>
