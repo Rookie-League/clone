@@ -4,7 +4,7 @@ import com.earphone.wrapper.annotation.LogPoint;
 import com.earphone.wrapper.wrapper.ResultWrapper.ResultWrapperBuilder;
 import com.earphone.common.constant.ResultType;
 import com.earphone.common.exception.NonCaptureException;
-import com.earphone.common.utils.JSONUtils;
+import com.earphone.common.utils.JSONExtend;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -53,7 +53,7 @@ public class ResultWrapAspect {
     @AfterReturning(value = CUT_EXPRESSION, returning = "result")
     public void after(JoinPoint joinPoint, Object result) throws Throwable {
         if (notBasicType(result)) {
-            logger.info("Return:{}", JSONUtils.toJSON(result));
+            logger.info("Return:{}", JSONExtend.toJSON(result));
         } else {
             logger.info("Return:{}", result);
         }

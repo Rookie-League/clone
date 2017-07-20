@@ -1,5 +1,9 @@
 package com.earphone.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -7,22 +11,27 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.util.Random;
 import java.util.UUID;
 
-import javax.imageio.ImageIO;
+import static java.awt.Color.CYAN;
+import static java.awt.Color.GRAY;
+import static java.awt.Color.LIGHT_GRAY;
+import static java.awt.Color.MAGENTA;
+import static java.awt.Color.ORANGE;
+import static java.awt.Color.PINK;
+import static java.awt.Color.WHITE;
+import static java.awt.Color.YELLOW;
 
-import com.earphone.common.validation.Assert;
-import org.apache.commons.lang3.StringUtils;
-
-public class CodeUtils {
+@Slf4j
+public class CodeExtend {
     // 使用到Algerian字体，系统里没有的话需要安装字体，字体只显示大写，去掉了1,0,i,o几个容易混淆的字符
     private static final String VERIFY_CODES = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
-    private static final Random random = new Random();
+    private static final ThreadLocal<Random> THREAD_LOCAL = ThreadLocal.withInitial(Random::new);
 
     public static String uniqueCode() {
         return UUID.randomUUID().toString().replace("-", "");
@@ -31,25 +40,26 @@ public class CodeUtils {
     /**
      * 使用系统默认字符源生成验证码
      *
-     * @param verifySize 验证码长度
+     * @param length 验证码长度
      */
-    public static String generateVerifyCode(final int verifySize) {
-        return generateVerifyCode(verifySize, VERIFY_CODES);
+    public static String generate(final int length) {
+        return generate(length, VERIFY_CODES);
     }
 
     /**
      * 使用指定源生成验证码，如果不指定字符源则使用默认源
      *
-     * @param verifySize 验证码长度
-     * @param sources    验证码字符源
+     * @param length  验证码长度
+     * @param sources 验证码字符源
      */
-    public static String generateVerifyCode(final int verifySize, final String sources) {
+    public static String generate(final int length, final String sources) {
         String code = formatSource(sources);
-        StringBuilder verifyCode = new StringBuilder(verifySize);
-        for (int i = 0, codeLength = code.length(); i < verifySize; i++) {
-            verifyCode.append(code.charAt(random.nextInt(codeLength - 1)));
+        StringBuilder source = new StringBuilder(length);
+        Random random = THREAD_LOCAL.get();
+        for (int i = 0, codeLength = code.length(); i < length; i++) {
+            source.append(code.charAt(random.nextInt(codeLength - 1)));
         }
-        return verifyCode.toString();
+        return source.toString();
     }
 
     private static String formatSource(final String sources) {
@@ -60,48 +70,20 @@ public class CodeUtils {
     }
 
     /**
-     * 生成随机验证码文件,并返回验证码值
-     */
-    public static String outputVerifyCodeToFile(int width, int height, File outputFile, int codeLength)
-            throws IOException {
-        String verifyCode = generateVerifyCode(codeLength);
-        outputVerifyCode(width, height, outputFile, verifyCode);
-        return verifyCode;
-    }
-
-    /**
      * 输出随机验证码图片流,并返回验证码值
      */
-    public static String outputVerifyCodeToStream(int width, int height, OutputStream os, int verifySize)
-            throws IOException {
-        String verifyCode = generateVerifyCode(verifySize);
-        outputVerifyCode(width, height, os, verifyCode);
-        return verifyCode;
+    public static InputStream toStream(int width, int height, int length) throws IOException {
+        return toStream(width, height, generate(length));
     }
 
-    /**
-     * 生成指定验证码图像文件
-     */
-    public static void outputVerifyCode(int width, int height, File outputFile, String code)
-            throws IOException {
-        Assert.wrapObject(outputFile).isNotEmpty("Output file is null");
-        File dir = outputFile.getParentFile();
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        Assert.wrapBoolean(outputFile.createNewFile()).isTrue("Fail to create new file");
-        try (FileOutputStream fos = new FileOutputStream(outputFile);) {
-            outputVerifyCode(width, height, fos, code);
-        }
-    }
-
-    private static final Color[] colors = new Color[]{Color.WHITE, Color.CYAN, Color.GRAY, Color.LIGHT_GRAY, Color.MAGENTA, Color.ORANGE, Color.PINK, Color.YELLOW};
+    private static final Color[] COLORS = new Color[]{WHITE, CYAN, GRAY, LIGHT_GRAY, MAGENTA, ORANGE, PINK, YELLOW};
 
     /**
+     * <p>
+     * /**
      * 输出指定验证码图片流
      */
-    public static void outputVerifyCode(int width, int height, OutputStream os, String code)
-            throws IOException {
+    public static InputStream toStream(int width, int height, String code) throws IOException {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = image.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -112,7 +94,10 @@ public class CodeUtils {
         shear(g2d, width, height, getRandColor(200, 250));// 使图片扭曲
         drawVerifyCode(width, height, code, g2d);
         g2d.dispose();
-        ImageIO.write(image, "jpg", os);
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream();) {
+            ImageIO.write(image, "jpg", os);
+            return new ByteArrayInputStream(os.toByteArray());
+        }
     }
 
     private static void drawVerifyCode(int width, int height, String code, Graphics2D g2d) {
@@ -146,14 +131,16 @@ public class CodeUtils {
     }
 
     private static double getTheta() {
+        Random random = THREAD_LOCAL.get();
         return Math.PI / 4 * random.nextDouble() * (random.nextBoolean() ? 1 : -1);
     }
 
     private static void addHotPixel(int width, int height, BufferedImage image) {
+        // 噪声率
+        float yawpRate = 0.05f;
+        Random random = THREAD_LOCAL.get();
         // 添加噪点
-        float yawpRate = 0.05f;// 噪声率
-        int area = (int) (yawpRate * width * height);
-        for (int i = 0; i < area; i++) {
+        for (int area = (int) (yawpRate * width * height), i = 0; i < area; i++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
             int rgb = getRandomIntColor();
@@ -163,7 +150,8 @@ public class CodeUtils {
 
     private static void drawBorderColor(int width, int height, Graphics2D g2d) {
         // 设置画笔颜色，绘制边框色
-        g2d.setColor(colors[random.nextInt(colors.length)]);
+        Random random = THREAD_LOCAL.get();
+        g2d.setColor(COLORS[random.nextInt(COLORS.length)]);
         g2d.fillRect(0, 0, width, height);
     }
 
@@ -176,6 +164,7 @@ public class CodeUtils {
     private static void drawInterferingLine(int width, int height, Graphics2D g2d) {
         // 设置画笔颜色，绘制干扰线
         g2d.setColor(getRandColor(160, 200));
+        Random random = THREAD_LOCAL.get();
         for (int i = 0; i < 20; i++) {
             int x = random.nextInt(width - 1);
             int y = random.nextInt(height - 1);
@@ -186,8 +175,13 @@ public class CodeUtils {
     }
 
     private static Color getRandColor(int rangeFrom, int rangeTo) {
-        if (rangeFrom > 255) rangeFrom = 255;
-        if (rangeTo > 255) rangeTo = 255;
+        if (rangeFrom > 255) {
+            rangeFrom = 255;
+        }
+        if (rangeTo > 255) {
+            rangeTo = 255;
+        }
+        Random random = THREAD_LOCAL.get();
         int r = rangeFrom + random.nextInt(rangeTo - rangeFrom);
         int g = rangeFrom + random.nextInt(rangeTo - rangeFrom);
         int b = rangeFrom + random.nextInt(rangeTo - rangeFrom);
@@ -206,6 +200,7 @@ public class CodeUtils {
 
     private static int[] getRandomRgb() {
         int[] rgb = new int[3];
+        Random random = THREAD_LOCAL.get();
         for (int i = 0; i < 3; i++) {
             rgb[i] = random.nextInt(255);
         }
@@ -218,6 +213,7 @@ public class CodeUtils {
     }
 
     private static void shearX(Graphics g, int w1, int h1, Color color) {
+        Random random = THREAD_LOCAL.get();
         int period = random.nextInt(2);
         int frames = 1;
         int phase = random.nextInt(2);
@@ -231,6 +227,7 @@ public class CodeUtils {
     }
 
     private static void shearY(Graphics g, int w1, int h1, Color color) {
+        Random random = THREAD_LOCAL.get();
         int period = random.nextInt(40) + 10;
         int frames = 20;
         int phase = 7;
@@ -240,16 +237,6 @@ public class CodeUtils {
             g.setColor(color);
             g.drawLine(i, (int) d, i, 0);
             g.drawLine(i, (int) d + h1, i, h1);
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        File dir = new File("D:/");
-        int w = 200, h = 80;
-        for (int i = 0; i < 50; i++) {
-            String verifyCode = generateVerifyCode(4);
-            File file = new File(dir, verifyCode + ".jpg");
-            outputVerifyCode(w, h, file, verifyCode);
         }
     }
 }

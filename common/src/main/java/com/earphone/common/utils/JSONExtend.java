@@ -2,8 +2,7 @@ package com.earphone.common.utils;
 
 import com.earphone.common.exception.NonCaptureException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author YaoJiamin
@@ -11,10 +10,9 @@ import org.slf4j.LoggerFactory;
  * @createDate 2017/3/10
  * @createTime 11:01
  */
-public final class JSONUtils {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JSONUtils.class);
-
-    private JSONUtils() {
+@Slf4j
+public final class JSONExtend {
+    private JSONExtend() {
     }
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -23,7 +21,7 @@ public final class JSONUtils {
         try {
             return OBJECT_MAPPER.writeValueAsString(object);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new NonCaptureException(e);
         }
     }
@@ -32,7 +30,7 @@ public final class JSONUtils {
         try {
             return OBJECT_MAPPER.readValue(json, clazz);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new NonCaptureException(e);
         }
     }

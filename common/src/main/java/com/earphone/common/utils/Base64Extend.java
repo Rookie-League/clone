@@ -2,6 +2,7 @@ package com.earphone.common.utils;
 
 import com.earphone.common.constant.Charset;
 import com.earphone.common.constant.ImageType;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.BaseNCodec;
 import org.apache.commons.io.FileUtils;
@@ -24,8 +25,9 @@ import java.util.UUID;
 /**
  * Created by YaoJiamin on 2016/11/2.
  */
-public final class Base64Utils {
-    private Base64Utils() {
+@Slf4j
+public final class Base64Extend {
+    private Base64Extend() {
     }
 
     private interface Base64Process {
@@ -33,36 +35,36 @@ public final class Base64Utils {
     }
 
     private static final Base64 BASE_64 = new Base64();
-    private static final Base64Process encodeProcess = BaseNCodec::encode;
-    private static final Base64Process decodeProcess = BaseNCodec::decode;
+    private static final Base64Process ENCODE_PROCESS = BaseNCodec::encode;
+    private static final Base64Process DECODE_PROCESS = BaseNCodec::decode;
 
     public static String encodeBytes(byte[] bytes) {
-        return new String(encodeProcess.process(BASE_64, bytes));
+        return new String(ENCODE_PROCESS.process(BASE_64, bytes));
     }
 
     public static String encode(String text) {
-        return encode(text, Charset.UTF_8);
+        return encode(text, Charset.UTF8);
     }
 
     public static String encode(String text, Charset charset) {
-        return process(encodeProcess, text, charset);
+        return process(ENCODE_PROCESS, text, charset);
     }
 
     public static byte[] decodeToBytes(byte[] bytes) {
-        return decodeProcess.process(BASE_64, bytes);
+        return DECODE_PROCESS.process(BASE_64, bytes);
     }
 
     public static String decode(String text) {
-        return decode(text, Charset.UTF_8);
+        return decode(text, Charset.UTF8);
     }
 
     public static String decode(String text, Charset charset) {
-        return process(decodeProcess, text, charset);
+        return process(DECODE_PROCESS, text, charset);
     }
 
     private static String process(Base64Process process, String text, Charset charset) {
         try {
-            return new String(process.process(BASE_64, text.getBytes(charset.getCharset())));
+            return new String(process.process(BASE_64, text.getBytes(charset.getValue())));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException("Unsupported Encoding.");
         }
@@ -108,7 +110,6 @@ public final class Base64Utils {
 
     private static final String DATA_ENCODE = "base64,";
 
-
     public static String encodeBase64Image(URL imageUrl) throws Exception {
         File file = new File(UUID.randomUUID().toString());
         try {
@@ -117,19 +118,21 @@ public final class Base64Utils {
                 byte[] bytes = readBytes(file);
                 String type = ImageType.getType(Arrays.copyOf(bytes, 50));
                 if (isImage(file, type)) {
-                    return type + DATA_ENCODE + Base64Utils.encodeBytes(bytes);
+                    return type + DATA_ENCODE + Base64Extend.encodeBytes(bytes);
                 }
             }
             return "";
         } finally {
-            file.delete();
+            if (file.delete()) {
+                log.debug("Success delete file");
+            }
         }
     }
 
     private static boolean isImage(File file, String extend) {
         try {
             BufferedImage bufferedImage = ImageIO.read(file);
-            return (bufferedImage != null && bufferedImage.getWidth() != 0 && bufferedImage.getHeight() != 0) || StringUtils.isNotBlank(extend);
+            return (bufferedImage != null && bufferedImage.getWidth() != 0 && bufferedImage.getHeight() != 0) || StringExtend.isNotBlank(extend);
         } catch (Exception e) {
             return false;
         }
@@ -138,8 +141,11 @@ public final class Base64Utils {
     private static byte[] readBytes(File file) {
         try (FileInputStream in = new FileInputStream(file)) {
             byte[] bytes = new byte[in.available()];
-            in.read(bytes);
-            return bytes;
+            int length = in.read(bytes);
+            if (length <= 0) {
+                return new byte[0];
+            }
+            return Arrays.copyOf(bytes, length);
         } catch (FileNotFoundException e) {
             throw new IllegalStateException("File Not Found!");
         } catch (IOException e) {
@@ -149,13 +155,13 @@ public final class Base64Utils {
 
     public static File decodeBase64Image(String filePath, String fileName, String imageData) {
         // 图片类型
-        String type = StringUtils.substringBefore(imageData, DATA_ENCODE);
+        String type = StringExtend.substringBefore(imageData, DATA_ENCODE);
         File file = createStoreFile(filePath, fileName, ImageType.getExtend(type));
         // 图片数据
-        String encodeImage = StringUtils.substringAfter(imageData, DATA_ENCODE);
-        if (Objects.nonNull(file) && StringUtils.isNotBlank(encodeImage)) {
+        String encodeImage = StringExtend.substringAfter(imageData, DATA_ENCODE);
+        if (Objects.nonNull(file) && StringExtend.isNotBlank(encodeImage)) {
             try (FileOutputStream os = new FileOutputStream(file)) {
-                os.write(Base64Utils.decodeToBytes(encodeImage.getBytes()));
+                os.write(Base64Extend.decodeToBytes(encodeImage.getBytes()));
             } catch (FileNotFoundException e) {
                 throw new IllegalStateException("File Not Found!");
             } catch (IOException e) {
@@ -167,10 +173,10 @@ public final class Base64Utils {
 
     private static File createStoreFile(String filePath, String fileName, String extend) {
         File path = new File(filePath);
-        if (!path.exists()) {
-            path.mkdirs();
+        if (!path.exists() && path.mkdirs()) {
+            log.debug("Success create file");
         }
-        if (StringUtils.isNotBlank(extend)) {
+        if (StringExtend.isNotBlank(extend)) {
             // 待存储的文件
             return new File(path.getPath() + File.separator + fileName + "." + extend);
         }

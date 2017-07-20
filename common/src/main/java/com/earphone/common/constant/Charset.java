@@ -5,14 +5,14 @@ package com.earphone.common.constant;
  */
 
 public enum Charset {
-    GBK("gbk"), UTF_8("utf-8"), ISO_8859_1("iso-8859-1");
-    private String charset;
+    GBK("gbk"), UTF8("utf-8"), ISO88591("iso-8859-1");
+    private String value;
 
-    public String getCharset() {
-        return charset;
+    public String getValue() {
+        return value;
     }
 
-    Charset(String charset) {
-        this.charset = charset;
+    Charset(String value) {
+        this.value = value;
     }
 }

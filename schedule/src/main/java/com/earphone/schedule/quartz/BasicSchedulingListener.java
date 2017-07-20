@@ -3,7 +3,7 @@ package com.earphone.schedule.quartz;
 import java.util.Map.Entry;
 
 import com.earphone.schedule.tag.QuartzJob;
-import com.earphone.common.utils.StringUtils;
+import com.earphone.common.utils.StringExtend;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.Job;
@@ -86,7 +86,7 @@ public abstract class BasicSchedulingListener implements ApplicationListener<Con
 
     private Trigger createTrigger(String name, String periodKey) {
         String period = parsePeriodKey(periodKey);
-        if (StringUtils.isNumeric(period)) {
+        if (StringExtend.isNumeric(period)) {
             return createSimpleTrigger(getInterval(period), createTriggerBuilder(name));
         }
         return createCronTrigger(period, createTriggerBuilder(name));

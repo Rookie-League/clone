@@ -1,5 +1,15 @@
 package com.earphone.common.plugin.nosql;
 
+import com.earphone.common.constant.ListOrder;
+import com.earphone.common.utils.JSONExtend;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -8,18 +18,6 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
-import com.earphone.common.constant.ListOrder;
-import com.earphone.common.utils.JSONUtils;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 /**
  * @author yaojiamin
@@ -111,7 +109,7 @@ public class RedisProcessor {
     }
 
     public boolean setObject(String key, Object object, int expire) {
-        return Objects.nonNull(object) && set(key, JSONUtils.toJSON(object), expire);
+        return Objects.nonNull(object) && set(key, JSONExtend.toJSON(object), expire);
     }
 
     public boolean setExpire(String key, int expire) {

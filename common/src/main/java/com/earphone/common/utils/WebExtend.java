@@ -1,5 +1,17 @@
 package com.earphone.common.utils;
 
+import com.earphone.common.constant.Charset;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,30 +27,15 @@ import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import javax.servlet.http.HttpServletResponse;
-
-import com.earphone.common.constant.Charset;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
- * @description
  * @author yaojiamin
+ * @description
  * @createTime 2016-4-8 上午11:18:22
  */
-public class WebUtils {
-    private static final Logger logger = LoggerFactory.getLogger(WebUtils.class);
-
+@Slf4j
+public final class WebExtend {
     public static String get(String url, Map<String, String> headers) throws Exception {
-        logger.info("GetURL={}", new Object[]{url});
+        log.info("GetURL={}", new Object[]{url});
         trustAllHosts();
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         setConnectionAttribute(connection, "GET", headers);
@@ -72,7 +69,7 @@ public class WebUtils {
         for (String line; (line = reader.readLine()) != null; ) {
             content.append(line);
         }
-        logger.info("GetHTTP Response={}", content);
+        log.info("GetHTTP Response={}", content);
         return content.toString();
     }
 
@@ -93,16 +90,16 @@ public class WebUtils {
 
     public static String post(String url, Map<String, Object> args, Map<String, String> headers)
             throws Exception {
-        logger.info("PostURL={}#Arguments={}", new Object[]{url, JSONUtils.toJSON(args)});
+        log.info("PostURL={}#Arguments={}", new Object[]{url, JSONExtend.toJSON(args)});
         trustAllHosts();
         PostMethod postMethod = initialWithHeader(url, headers);
         if (Objects.nonNull(args) && !args.isEmpty()) {
-            postMethod.setRequestBody(args.entrySet().stream().map(entry -> new NameValuePair(entry.getKey(), JSONUtils.toJSON(entry.getValue()))).collect(Collectors.toList()).toArray(new NameValuePair[0]));
+            postMethod.setRequestBody(args.entrySet().stream().map(entry -> new NameValuePair(entry.getKey(), JSONExtend.toJSON(entry.getValue()))).collect(Collectors.toList()).toArray(new NameValuePair[0]));
         }
         httpClient.executeMethod(postMethod);
         try {
             String response = postMethod.getResponseBodyAsString();//new String(postMethod.getResponseBody(), parseCharset(headers.get("Content-Type")));
-            logger.info("PostHTTP Response={}", new Object[]{response});
+            log.info("PostHTTP Response={}", new Object[]{response});
             return response;
         } catch (Exception e) {
             throw e;
@@ -122,7 +119,7 @@ public class WebUtils {
         if (StringUtils.isNotBlank(contentType) && (index = contentType.indexOf("charset")) != -1) {
             return contentType.substring(index + 8);
         }
-        return Charset.UTF_8.getCharset();
+        return Charset.UTF8.getValue();
     }
 
     private static final Map<String, String> postHeaders = new TreeMap<String, String>() {
@@ -152,7 +149,7 @@ public class WebUtils {
             writer.println(message);
             writer.flush();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -180,7 +177,7 @@ public class WebUtils {
             sc.init(null, trustAllCerts, new SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 }

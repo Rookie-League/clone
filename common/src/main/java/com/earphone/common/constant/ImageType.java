@@ -1,6 +1,6 @@
 package com.earphone.common.constant;
 
-import com.earphone.common.utils.ByteUtils;
+import com.earphone.common.utils.ByteExtend;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +44,7 @@ public enum ImageType {
     }
 
     public static String getType(byte[] bytes) {
-        String typeHex = ByteUtils.byteArrayToHex(bytes);
+        String typeHex = ByteExtend.byteArrayToHex(bytes);
         for (ImageType imageType : ImageType.values()) {
             if (typeHex.toUpperCase().startsWith(imageType.getHeader())) {
                 return imageType.getType();

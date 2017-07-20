@@ -7,19 +7,22 @@ package com.earphone.common.constant;
  * @createTime 8:48
  */
 public enum ListOrder {
-    ASC("asc"), DESC("desc");
-    public String order;
+    ASC("ASC"), DESC("DESC");
+    private String value;
 
-    ListOrder(String order) {
-        this.order = order;
+    public String getValue() {
+        return value;
+    }
+
+    ListOrder(String value) {
+        this.value = value;
     }
 
     public static ListOrder parseOrder(String order) {
-        for (ListOrder listOrder : ListOrder.values()) {
-            if (listOrder.order.equals(order.toLowerCase().trim())) {
-                return listOrder;
-            }
+        try {
+            return ListOrder.valueOf(order);
+        } catch (Exception ex) {
+            return ASC;
         }
-        return ASC;
     }
 }
