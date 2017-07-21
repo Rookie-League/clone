@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.1.RELEASE</version>
+        <version>1.5.4.RELEASE</version>
     </parent>
 
     <properties>
@@ -205,39 +205,106 @@
                     <compilerVersion>${maven.compiler.version}</compilerVersion>
                 </configuration>
             </plugin>
+
             <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.9</version>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>1.16.16.0</version>
                 <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
                 <executions>
                     <execution>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>prepare-agent</goal>
-                            <goal>report</goal>
+                            <goal>delombok</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.9</version>
+                <executions>
+                    <execution>
+                        <!--存在多个execution的时候需要定义唯一id-->
+                        <id>jacoco-prepare</id>
+                        <goals>
+                            <!--配置goal的时候要注意phase,如果不匹配会出不来exec数据文件-->
+                            <goal>prepare-agent</goal>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <!--
+                        如果用integration的话,需要单独配置phase,而且,
+                        数据文件名称默认为jacoco-it.exec,所以需要稍微修改一下配置.
+                    -->
+                    <!--<execution>
+                        <id>jacoco-verify</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>jacoco.exe</dataFile>
+                        </configuration>
+                    </execution>-->
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.6</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/${artifactId}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
                 <version>2.5</version>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>3.8</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>pmd</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <linkXref>true</linkXref>
+                    <linkXRef>true</linkXRef>
                     <sourceEncoding>utf-8</sourceEncoding>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>findbugs</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <!-- 设置分析工作的等级，可以为Min、Default和Max -->
                     <effort>Max</effort>
@@ -249,10 +316,58 @@
                     <!--<excludeFilterFile>findbugs/findbugs-exclude-filter.xml</excludeFilterFile>-->
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>xml-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>transform</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--
+                        在maven下生成的findbugs报告是xml文件,需要用特定插件进行转化
+                        com.google.code.findbugs的包里有六种转换的样式可供选择
+                    -->
+                    <transformationSets>
+                        <transformationSet>
+                            <dir>${project.build.directory}</dir>
+                            <includes>
+                                <include>findbugsXml.xml</include>
+                            </includes>
+                            <outputDir>${project.build.directory}/site</outputDir>
+                            <!--<stylesheet>fancy-hist.xsl</stylesheet>-->
+                            <!--<stylesheet>default.xsl</stylesheet>-->
+                            <!--<stylesheet>plain.xsl</stylesheet>-->
+                            <!--<stylesheet>fancy.xsl</stylesheet>-->
+                            <!--<stylesheet>summary.xsl</stylesheet>-->
+                            <stylesheet>color.xsl</stylesheet>
+                            <fileMappers>
+                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                    <targetExtension>.html</targetExtension>
+                                </fileMapper>
+                            </fileMappers>
+                        </transformationSet>
+                    </transformationSets>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>findbugs</artifactId>
+                        <version>3.0.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
     <reporting>
+        <outputDirectory>${project.build.directory}/${artifactId}</outputDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

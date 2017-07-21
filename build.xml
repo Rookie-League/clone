@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="build" default="all" basedir=".">
+    <property name="war.name" value="tmcp_web"/>
+    <property name="src.dir" value="${basedir}/src/main"/>
+    <property name="test.dir" value="${basedir}/src/test"/>
+    <property name="web.dir" value="${basedir}/src/main/webapp"/>
+    <property name="lib.dir" value="${web.dir}/WEB-INF/lib"/>
+    <property name="class.dir" value="${web.dir}/WEB-INF/classes"/>
+    <property name="test-class.dir" value="${web.dir}/WEB-INF/classes"/>
+
+    <property name="compile.debug" value="true"/>
+    <property name="compile.deprecation" value="false"/>
+    <property name="compile.optimize" value="true"/>
+
+    <property name="junit.debug" value="true"/>
+    <property name="junit.deprecation" value="false"/>
+    <property name="junit.optimize" value="true"/>
+
+    <target name="all" depends="pre-clean,compile,compile-test,junit,package"/>
+
+    <target name="pre-clean">
+        <delete dir="${class.dir}" failonerror="false"/>
+        <delete file="${war.name}.war" failonerror="false"/>
+        <delete dir="${test.dir}/output" failonerror="false"/>
+        <delete dir="${test.dir}/report" failonerror="false"/>
+        <delete dir="${test.dir}/result" failonerror="false"/>
+    </target>
+
+    <target name="compile" depends="pre-clean">
+        <mkdir dir="${class.dir}"/>
+        <javac source="1.7" target="1.7" encoding="UTF-8" srcdir="${src.dir}" destdir="${class.dir}" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" includeantruntime="on">
+            <compilerarg value="-Xlint:unchecked"/>
+            <classpath>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+        <copy todir="${class.dir}" overwrite="true">
+            <fileset dir="${src.dir}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile-test" depends="compile">
+        <mkdir dir="${test.dir}/output"/>
+        <javac source="1.7" target="1.7" encoding="UTF-8" srcdir="${test.dir}/java" destdir="${test.dir}/output" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" includeantruntime="on">
+            <compilerarg value="-Xlint:unchecked"/>
+            <classpath>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+                <pathelement location="${class.dir}"/>
+            </classpath>
+        </javac>
+        <copy todir="${test.dir}/output">
+            <fileset dir="${test.dir}/java">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="junit" depends="compile-test">
+        <junit printsummary="yes" haltonerror="yes" haltonfailure="yes">
+            <!-- 需要的classpath -->
+            <classpath>
+                <fileset dir="${lib.dir}">
+                    <include name="*.jar"/>
+                </fileset>
+                <pathelement location="${class.dir}"/>
+                <pathelement location="${test.dir}/output"/>
+            </classpath>
+            <!-- 测试的xml文件生成到指定目录 -->
+            <batchtest todir="${test.dir}/result">
+                <!-- 单元测试文件为所有src目录下的*Test.java文件 -->
+                <fileset dir="${test.dir}/java">
+                    <include name="**/*Test.java"/>
+                </fileset>
+                <!-- 生成格式为xml，也可以用plain或者brief -->
+                <!-- 为什么生成xml，是为了下一步做report用 -->
+                <formatter type="xml"/>
+            </batchtest>
+        </junit>
+        <!-- 对xml文件生成相应的html文件在reports目录下 -->
+        <!-- 如果指定于web可访问的目录，就可以使整个项目组看到单元测试情况 -->
+        <!-- junit测试信息的根目录 -->
+        <junitreport todir="${test.dir}/report">
+            <!-- 生成的测试文件所在的目录 -->
+            <fileset dir="${test.dir}/result">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <!-- 带有框架，可以用noframes选不带框架 -->
+            <!-- 生成html页面的目录 -->
+            <report todir="${test.dir}/report/html"/>
+        </junitreport>
+    </target>
+
+    <target name="package" depends="junit">
+        <war basedir="${web.dir}" webxml="${web.dir}/WEB-INF/web.xml" destfile="${war.name}.war">
+            <fileset dir="${web.dir}">
+                <include name="***.*"/>
+            </fileset>
+        </war>
+    </target>
+
+    <target name="sub-clean">
+        <delete dir="${class.dir}" failonerror="false"/>
+    </target>
+</project>

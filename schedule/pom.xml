@@ -30,4 +30,37 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <!--这个插件被用来集中各种输出报告-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>site</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!--输出所有属性值-->
+                                <!--<echoproperties/>-->
+                                <echo message="********************Start copy profile property file*************************"/>
+                                <copy todir="${user.dir}/target/clone/schedule" overwrite="true">
+                                    <fileset dir="target/schedule">
+                                        <include name="**/*"/>
+                                    </fileset>
+                                </copy>
+                                <delete dir="target/schedule" failonerror="false"/>
+                                <echo message="********************Finish copy profile property file*************************"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
