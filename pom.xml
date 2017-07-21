@@ -340,7 +340,7 @@
                             <includes>
                                 <include>findbugsXml.xml</include>
                             </includes>
-                            <outputDir>${project.build.directory}/site</outputDir>
+                            <outputDir>${project.reporting.outputDirectory}</outputDir>
                             <!--<stylesheet>fancy-hist.xsl</stylesheet>-->
                             <!--<stylesheet>default.xsl</stylesheet>-->
                             <!--<stylesheet>plain.xsl</stylesheet>-->
