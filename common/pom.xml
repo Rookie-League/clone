@@ -99,12 +99,12 @@
                                 <!--输出所有属性值-->
                                 <!--<echoproperties/>-->
                                 <echo message="********************Start copy profile property file*************************"/>
-                                <copy todir="${user.dir}/target/clone/common" overwrite="true">
-                                    <fileset dir="target/common">
+                                <copy todir="${user.dir}/target/clone/${project.artifactId}" overwrite="true">
+                                    <fileset dir="${project.build.directory}/${project.artifactId}">
                                         <include name="**/*"/>
                                     </fileset>
                                 </copy>
-                                <delete dir="target/common" failonerror="false"/>
+                                <delete dir="${project.build.directory}/${project.artifactId}" failonerror="false"/>
                                 <echo message="********************Finish copy profile property file*************************"/>
                             </target>
                         </configuration>
@@ -113,5 +113,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
