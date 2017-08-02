@@ -90,11 +90,11 @@ public final class WebExtend {
 
     public static String post(String url, Map<String, Object> args, Map<String, String> headers)
             throws Exception {
-        log.info("PostURL={}#Arguments={}", new Object[]{url, JSONExtend.toJSON(args)});
+        log.info("PostURL={}#Arguments={}", new Object[]{url, JSONExtend.asJSON(args)});
         trustAllHosts();
         PostMethod postMethod = initialWithHeader(url, headers);
         if (Objects.nonNull(args) && !args.isEmpty()) {
-            postMethod.setRequestBody(args.entrySet().stream().map(entry -> new NameValuePair(entry.getKey(), JSONExtend.toJSON(entry.getValue()))).collect(Collectors.toList()).toArray(new NameValuePair[0]));
+            postMethod.setRequestBody(args.entrySet().stream().map(entry -> new NameValuePair(entry.getKey(), JSONExtend.asJSON(entry.getValue()))).collect(Collectors.toList()).toArray(new NameValuePair[0]));
         }
         httpClient.executeMethod(postMethod);
         try {

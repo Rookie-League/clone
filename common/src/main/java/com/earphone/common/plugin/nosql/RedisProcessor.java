@@ -109,7 +109,7 @@ public class RedisProcessor {
     }
 
     public boolean setObject(String key, Object object, int expire) {
-        return Objects.nonNull(object) && set(key, JSONExtend.toJSON(object), expire);
+        return Objects.nonNull(object) && set(key, JSONExtend.asJSON(object), expire);
     }
 
     public boolean setExpire(String key, int expire) {

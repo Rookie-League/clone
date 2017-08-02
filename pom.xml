@@ -271,6 +271,7 @@
             </plugin>
 
             <plugin>
+                <!--这货有递归分析的逻辑，如果引用深度比较夸张，有可能会出现栈溢出的情况-->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
                 <version>2.5</version>
@@ -312,6 +313,7 @@
                     <threshold>Low</threshold>
                     <xmlOutput>true</xmlOutput>
                     <findbugsXmlOutput>true</findbugsXmlOutput>
+                    <jvmArgs>-Dfile.encoding=UTF-8</jvmArgs>
                     <!--findbugs需要忽略的错误的配置文件-->
                     <!--<excludeFilterFile>findbugs/findbugs-exclude-filter.xml</excludeFilterFile>-->
                 </configuration>

@@ -53,7 +53,7 @@ public class ResultWrapAspect {
     @AfterReturning(value = CUT_EXPRESSION, returning = "result")
     public void after(JoinPoint joinPoint, Object result) throws Throwable {
         if (notBasicType(result)) {
-            logger.info("Return:{}", JSONExtend.toJSON(result));
+            logger.info("Return:{}", JSONExtend.asJSON(result));
         } else {
             logger.info("Return:{}", result);
         }
