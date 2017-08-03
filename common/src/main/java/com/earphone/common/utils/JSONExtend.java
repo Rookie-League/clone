@@ -1,6 +1,7 @@
 package com.earphone.common.utils;
 
 import com.earphone.common.exception.NonCaptureException;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -18,7 +19,7 @@ public final class JSONExtend {
     private static final ObjectMapper OBJECT_MAPPER = createObjectMapper();
 
     private static ObjectMapper createObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper().setSerializationInclusion(Include.NON_NULL);
         objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         //设置输入时忽略JSON字符串中存在而Java对象实际没有的属性
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
