@@ -1,6 +1,5 @@
 package com.earphone.wrapper;
 
-import com.earphone.wrapper.aspect.ResultWrapAspect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -15,7 +14,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @Configuration
 public class WrapperAutoConfiguration {
     @Bean
-    public ResultWrapAspect resultWrapAspect() {
-        return new ResultWrapAspect();
+    public WrapModelAspect resultWrapAspect() {
+        return new WrapModelAspect();
     }
 }

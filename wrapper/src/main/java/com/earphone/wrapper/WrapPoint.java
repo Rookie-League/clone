@@ -1,4 +1,4 @@
-package com.earphone.wrapper.annotation;
+package com.earphone.wrapper;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LogPoint {
+public @interface WrapPoint {
     /**
      * 这个值一般用于记录一些与目标注解方法相关的信息,
      * 比如方法业务描述或功能描述或参考数据或其他信息。

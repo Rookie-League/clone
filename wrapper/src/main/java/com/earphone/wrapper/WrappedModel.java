@@ -1,4 +1,4 @@
-package com.earphone.wrapper.wrapper;
+package com.earphone.wrapper;
 
 import com.earphone.common.constant.ResultType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,7 +16,7 @@ import lombok.Value;
 @JsonInclude(Include.NON_NULL)
 @Builder
 @Value
-public class ResultWrapper {
+public class WrappedModel {
     @JsonIgnore
     private ResultType type;
     private Object result;

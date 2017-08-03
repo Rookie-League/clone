@@ -1,9 +1,8 @@
-package com.earphone.wrapper.aspect;
+package com.earphone.wrapper;
 
 import com.earphone.common.constant.ResultType;
 import com.earphone.common.exception.NonCaptureException;
-import com.earphone.wrapper.annotation.LogPoint;
-import com.earphone.wrapper.wrapper.ResultWrapper;
+import com.earphone.wrapper.WrapRecord.WrapRecordBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,7 +16,6 @@ import java.lang.reflect.Method;
 
 import static com.earphone.common.constant.ResultType.FAILURE;
 import static com.earphone.common.constant.ResultType.SUCCESS;
-import static com.earphone.common.utils.JSONExtend.asPrettyJSON;
 
 /**
  * @author yaojiamin
@@ -27,13 +25,14 @@ import static com.earphone.common.utils.JSONExtend.asPrettyJSON;
 @Aspect
 @Slf4j
 @Component
-public class ResultWrapAspect {
-    public ResultWrapAspect() {
+public class WrapModelAspect {
+    WrapModelAspect() {
         log.info("####################Initial ResultWrapAspect####################");
     }
 
+    private static final ThreadLocal<WrapRecordBuilder> WRAP_RECORD = ThreadLocal.withInitial(WrapRecord::builder);
     // 切面表达式
-    private static final String CUT_EXPRESSION = "@annotation(org.springframework.web.bind.annotation.RequestMapping) and @annotation(com.earphone.wrapper.annotation.LogPoint)";
+    private static final String CUT_EXPRESSION = "@annotation(org.springframework.web.bind.annotation.RequestMapping) and @annotation(com.earphone.wrapper.WrapPoint)";
 
     //会调用两次
     @Around(CUT_EXPRESSION)
@@ -41,24 +40,22 @@ public class ResultWrapAspect {
     //@AfterThrowing(value = CUT_EXPRESSION, throwing = "exception")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
-        LogPoint annotation = method.getAnnotation(LogPoint.class);
+        WrapPoint annotation = method.getAnnotation(WrapPoint.class);
         boolean forceFailure = annotation.forceFailure();
         try {
-            log.info("\nInvoke:LogPoint=[{}]", annotation.value());
-            Object[] args = joinPoint.getArgs();
-            if (annotation.serialize()) {
-                log.info("\nInvoke:Argument={}", asPrettyJSON(args));
-            }
-            Object result = joinPoint.proceed(args);
+            //全限定方法名
+            String signature = method.getDeclaringClass().getName().concat(method.getName()).concat("()");
+            WRAP_RECORD.get().signature(signature).point(annotation.value()).serialize(annotation.serialize()).arguments(joinPoint.getArgs());
+            Object result = joinPoint.proceed(joinPoint.getArgs());
             if (annotation.wrapped()) {
-                return ResultWrapper.builder().result(result).type(forceType(forceFailure, SUCCESS)).build();
+                return WrappedModel.builder().result(result).type(forceType(forceFailure, SUCCESS)).build();
             }
             return result;
         } catch (NonCaptureException e) {
-            return ResultWrapper.builder().error(e.getMessage()).type(forceType(forceFailure, FAILURE)).build();
+            return WrappedModel.builder().error(e.getMessage()).type(forceType(forceFailure, FAILURE)).build();
         } catch (Throwable e) {
             log.error(e.getMessage(), e);
-            return ResultWrapper.builder().error(e.getMessage()).type(forceType(forceFailure, FAILURE)).build();
+            return WrappedModel.builder().error(e.getMessage()).type(forceType(forceFailure, FAILURE)).build();
         }
     }
 
@@ -68,14 +65,7 @@ public class ResultWrapAspect {
 
     @AfterReturning(value = CUT_EXPRESSION, returning = "result")
     public void after(JoinPoint joinPoint, Object result) throws Throwable {
-        if (notBasicType(result)) {
-            log.info("\nReturn:{}", asPrettyJSON(result));
-        } else {
-            log.info("\nReturn:{}", result);
-        }
-    }
-
-    private boolean notBasicType(Object result) {
-        return !(result instanceof CharSequence) && !(result instanceof Number) && !(result instanceof Character) && !(result instanceof Boolean);
+        WRAP_RECORD.get().result(result).build().record();
+        WRAP_RECORD.remove();
     }
 }

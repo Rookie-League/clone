@@ -26,7 +26,7 @@
 
         <earphone.common.version>0.0.5-SNAPSHOT</earphone.common.version>
         <earphone.schedule.version>0.0.2-SNAPSHOT</earphone.schedule.version>
-        <earphone.wrapper.version>0.0.8-SNAPSHOT</earphone.wrapper.version>
+        <earphone.wrapper.version>0.0.11-SNAPSHOT</earphone.wrapper.version>
         <quartz.version>2.2.1</quartz.version>
         <cglib.version>3.1</cglib.version>
         <druid.version>1.0.13</druid.version>
