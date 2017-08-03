@@ -12,7 +12,6 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
@@ -22,7 +21,6 @@ import java.lang.reflect.Method;
  * @createTime 2015-12-2 下午5:05:52
  */
 @Aspect
-@Component
 @Slf4j
 public class ResultWrapAspect {
     public ResultWrapAspect() {
@@ -47,7 +45,7 @@ public class ResultWrapAspect {
             }
             return result;
         } catch (NonCaptureException e) {
-            return new ResultWrapperBuilder().setType(ResultType.FAILURE).builder();
+            return new ResultWrapperBuilder().setError(e.getMessage()).setType(ResultType.FAILURE).builder();
         } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return new ResultWrapperBuilder().setError(e.getMessage()).setType(ResultType.FAILURE).builder();

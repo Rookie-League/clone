@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.littlearphone</groupId>
     <artifactId>clone</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <modules>
         <module>common</module>
         <module>schedule</module>
@@ -152,6 +152,14 @@
     <build>
         <!-- 主资源目录 -->
         <resources>
+            <!--描述存放资源的目录，该路径相对POM路径-->
+            <!--如果在源码路径有配置文件需要管理，一定要配置这个-->
+            <!--<resource>
+                <directory>${basedir}/src/main/java</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>-->
             <resource>
                 <!-- 设定主资源目录 -->
                 <directory>${basedir}/src/main/resources</directory>
@@ -165,36 +173,43 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-        <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
+        <!--因为使用了Lombok，所以编译和打包用的路径不能是原始路径，需要按照Lombok具体输出路径进行配置-->
+        <sourceDirectory>${project.build.directory}/generated-sources/delombok</sourceDirectory>
+        <testSourceDirectory>${project.build.directory}/generated-test-sources/delombok</testSourceDirectory>
 
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <skip>false</skip>
-                </configuration>
+                <version>2.8.2</version>
             </plugin>
 
+            <!--
+            生成源码包的插件，需要进行略微配置。
+            从上到下，配置了很多地方，而且都是有关联的，之所以要搞这么复杂，
+            是因为lombok源码和生成的class对不上，在调试的时候会不方便
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <attach>true</attach>
-                </configuration>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
-                        <phase>compile</phase>
+                        <id>source-package</id>
+                        <!--
+                        因为源码是lombok生成的，晚于generated-source阶段，
+                        所以不能在原始的generated-source阶段进行，
+                        而为了满足这个需求，还要配合使用jar-no-fork
+                        -->
+                        <phase>package</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>jar-no-fork</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
 
+            <!--这里编译用的路径是maven的sourceDirectory和testSourceDirectory，所以上面要改掉-->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.6.0</version>
@@ -215,10 +230,29 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>lombok-source</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>delombok</goal>
                         </goals>
+                        <configuration>
+                            <!--
+                            使用lombok的源码路径，默认的是src/main/lombok，
+                            为了避免修改源文件目录所以按照实际的目录进行配置
+                            -->
+                            <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>lombok-test-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>testDelombok</goal>
+                        </goals>
+                        <configuration>
+                            <!--这个地方配置的原因和上面是一样的-->
+                            <sourceDirectory>${basedir}/src/test/java</sourceDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -366,6 +400,16 @@
                 </dependencies>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <!--这个插件被用来集中和清理各种输出-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <reporting>

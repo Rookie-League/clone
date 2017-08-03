@@ -5,12 +5,12 @@
     <parent>
         <artifactId>clone</artifactId>
         <groupId>com.littlearphone</groupId>
-        <version>0.0.2-SNAPSHOT</version>
+        <version>0.0.3-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>schedule</artifactId>
-    <version>${project.parent.version}</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -36,7 +36,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
                 <executions>
                     <execution>
                         <id>site</id>
@@ -56,6 +55,22 @@
                                 </copy>
                                 <delete dir="${project.build.directory}/${project.artifactId}" failonerror="false"/>
                                 <echo message="********************Finish copy profile property file*************************"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <!--清理Lombok输出-->
+                    <execution>
+                        <id>source</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!--输出所有属性值-->
+                                <!--<echoproperties/>-->
+                                <delete dir="${project.build.directory}/generated-sources" failonerror="false"/>
+                                <delete dir="${project.build.directory}/generated-test-sources" failonerror="false"/>
                             </target>
                         </configuration>
                     </execution>
