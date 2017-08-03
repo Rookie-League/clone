@@ -10,7 +10,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>schedule</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>${earphone.schedule.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>

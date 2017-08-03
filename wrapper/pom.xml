@@ -10,20 +10,20 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wrapper</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>${earphone.wrapper.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
+        <dependency>
+            <groupId>com.littlearphone</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
         <!-- tag::com.earphone.wrapperpper[] -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <!-- end::com.earphone.wrapperpper[] -->
-        <dependency>
-            <groupId>com.littlearphone</groupId>
-            <artifactId>common</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

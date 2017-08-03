@@ -2,9 +2,8 @@ package com.earphone.wrapper.aspect;
 
 import com.earphone.common.constant.ResultType;
 import com.earphone.common.exception.NonCaptureException;
-import com.earphone.common.utils.JSONExtend;
 import com.earphone.wrapper.annotation.LogPoint;
-import com.earphone.wrapper.wrapper.ResultWrapper.ResultWrapperBuilder;
+import com.earphone.wrapper.wrapper.ResultWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -15,6 +14,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+
+import static com.earphone.common.constant.ResultType.FAILURE;
+import static com.earphone.common.constant.ResultType.SUCCESS;
+import static com.earphone.common.utils.JSONExtend.asPrettyJSON;
 
 /**
  * @author yaojiamin
@@ -37,54 +40,42 @@ public class ResultWrapAspect {
     //@Before(CUT_EXPRESSION)
     //@AfterThrowing(value = CUT_EXPRESSION, throwing = "exception")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+        LogPoint annotation = method.getAnnotation(LogPoint.class);
+        boolean forceFailure = annotation.forceFailure();
         try {
-            Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
-            LogPoint annotation = method.getAnnotation(LogPoint.class);
-            log.info("Invoke:{}", annotation.value());
-            Object result = joinPoint.proceed(joinPoint.getArgs());
+            log.info("\nInvoke:LogPoint=[{}]", annotation.value());
+            Object[] args = joinPoint.getArgs();
+            if (annotation.serialize()) {
+                log.info("\nInvoke:Argument={}", asPrettyJSON(args));
+            }
+            Object result = joinPoint.proceed(args);
             if (annotation.wrapped()) {
-                return new ResultWrapperBuilder().setResult(result).builder();
+                return ResultWrapper.builder().result(result).type(forceType(forceFailure, SUCCESS)).build();
             }
             return result;
         } catch (NonCaptureException e) {
-            return new ResultWrapperBuilder().setError(e.getMessage()).setType(ResultType.FAILURE).builder();
+            return ResultWrapper.builder().error(e.getMessage()).type(forceType(forceFailure, FAILURE)).build();
         } catch (Throwable e) {
             log.error(e.getMessage(), e);
-            return new ResultWrapperBuilder().setError(e.getMessage()).setType(ResultType.FAILURE).builder();
+            return ResultWrapper.builder().error(e.getMessage()).type(forceType(forceFailure, FAILURE)).build();
         }
+    }
+
+    private ResultType forceType(boolean forceFailure, ResultType realType) {
+        return forceFailure ? FAILURE : realType;
     }
 
     @AfterReturning(value = CUT_EXPRESSION, returning = "result")
     public void after(JoinPoint joinPoint, Object result) throws Throwable {
         if (notBasicType(result)) {
-            log.info("Return:{}", JSONExtend.asJSON(result));
+            log.info("\nReturn:{}", asPrettyJSON(result));
         } else {
-            log.info("Return:{}", result);
+            log.info("\nReturn:{}", result);
         }
     }
 
     private boolean notBasicType(Object result) {
-        if (result instanceof String) {
-            return false;
-        }
-        if (result instanceof Integer) {
-            return false;
-        }
-        if (result instanceof Long) {
-            return false;
-        }
-        if (result instanceof Short) {
-            return false;
-        }
-        if (result instanceof Double) {
-            return false;
-        }
-        if (result instanceof Float) {
-            return false;
-        }
-        if (result instanceof Character) {
-            return false;
-        }
-        return !(result instanceof Boolean);
+        return !(result instanceof CharSequence) && !(result instanceof Number) && !(result instanceof Character) && !(result instanceof Boolean);
     }
 }

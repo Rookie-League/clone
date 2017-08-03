@@ -24,9 +24,9 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.version>1.8</maven.compiler.version>
 
-        <earphone.common.version>0.0.3-SNAPSHOT</earphone.common.version>
+        <earphone.common.version>0.0.5-SNAPSHOT</earphone.common.version>
         <earphone.schedule.version>0.0.2-SNAPSHOT</earphone.schedule.version>
-        <earphone.wrapper.version>0.0.4-SNAPSHOT</earphone.wrapper.version>
+        <earphone.wrapper.version>0.0.8-SNAPSHOT</earphone.wrapper.version>
         <quartz.version>2.2.1</quartz.version>
         <cglib.version>3.1</cglib.version>
         <druid.version>1.0.13</druid.version>
@@ -160,6 +160,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
         </dependency>
+        <!--使用Lombok生成的代码(如@Builder的builder())不能使用静态导入，否则maven编译会失败-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

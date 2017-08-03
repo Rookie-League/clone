@@ -14,7 +14,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LogPoint {
-
     /**
      * 这个值一般用于记录一些与目标注解方法相关的信息,
      * 比如方法业务描述或功能描述或参考数据或其他信息。
@@ -31,4 +30,17 @@ public @interface LogPoint {
      */
     boolean wrapped() default true;
 
+    /**
+     * 强行设置返回结果为失败，不管实际执行是否成功
+     *
+     * @return 返回结果
+     */
+    boolean forceFailure() default false;
+
+    /**
+     * 是否序列化参数
+     *
+     * @return 返回结果
+     */
+    boolean serialize() default true;
 }
