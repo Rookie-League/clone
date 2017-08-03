@@ -14,6 +14,10 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <dependency>
+            <groupId>com.littlearphone</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
         <!-- quartz dependencies -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
@@ -22,11 +26,6 @@
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz-jobs</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.littlearphone</groupId>
-            <artifactId>common</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

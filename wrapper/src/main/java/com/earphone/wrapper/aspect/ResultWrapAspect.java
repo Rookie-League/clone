@@ -12,6 +12,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
@@ -22,6 +23,7 @@ import java.lang.reflect.Method;
  */
 @Aspect
 @Slf4j
+@Component
 public class ResultWrapAspect {
     public ResultWrapAspect() {
         log.info("####################Initial ResultWrapAspect####################");
