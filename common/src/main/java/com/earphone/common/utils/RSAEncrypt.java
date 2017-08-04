@@ -24,6 +24,7 @@ import static com.earphone.common.utils.PathExtend.classpath;
 
 @Slf4j
 public final class RSAEncrypt {
+    private static final RSAEncrypt RSA_ENCRYPT = new RSAEncrypt();
     public static final String DEFAULT_PRIVATE_KEY_PATH = classpath().concat("/privateKey.keystore");
     public static final String DEFAULT_PUBLIC_KEY_PATH = classpath().concat("/publicKey.keystore");
 

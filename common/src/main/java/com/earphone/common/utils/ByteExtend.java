@@ -4,6 +4,8 @@ package com.earphone.common.utils;
  * Created by YaoJiamin on 2016/11/2.
  */
 public final class ByteExtend {
+    private static final ByteExtend BYTE_EXTEND = new ByteExtend();
+
     private ByteExtend() {
     }
 

@@ -28,10 +28,14 @@ import static java.awt.Color.WHITE;
 import static java.awt.Color.YELLOW;
 
 @Slf4j
-public class CodeExtend {
+public final class CodeExtend {
+    private static final CodeExtend CODE_EXTEND = new CodeExtend();
     // 使用到Algerian字体，系统里没有的话需要安装字体，字体只显示大写，去掉了1,0,i,o几个容易混淆的字符
     private static final String VERIFY_CODES = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
     private static final ThreadLocal<Random> THREAD_LOCAL = ThreadLocal.withInitial(Random::new);
+
+    private CodeExtend() {
+    }
 
     public static String uniqueCode() {
         return UUID.randomUUID().toString().replace("-", "");

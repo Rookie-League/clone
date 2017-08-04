@@ -24,7 +24,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.version>1.8</maven.compiler.version>
 
-        <earphone.common.version>0.0.6-SNAPSHOT</earphone.common.version>
+        <earphone.common.version>0.0.7-SNAPSHOT</earphone.common.version>
         <earphone.schedule.version>0.0.2-SNAPSHOT</earphone.schedule.version>
         <earphone.wrapper.version>0.0.11-SNAPSHOT</earphone.wrapper.version>
         <quartz.version>2.2.1</quartz.version>
@@ -32,9 +32,8 @@
         <druid.version>1.0.13</druid.version>
         <logback.ext.spring>0.1.4</logback.ext.spring>
         <commons.io.version>2.4</commons.io.version>
-        <commons-lang3.version>3.4</commons-lang3.version>
-        <commons.httpclient>3.1</commons.httpclient>
-        <commons.http.version>4.4</commons.http.version>
+        <commons.lang3.version>3.4</commons.lang3.version>
+        <commons.http.version>4.5.3</commons.http.version>
         <json.lib.version>2.4</json.lib.version>
         <mybatis.spring.version>1.2.0</mybatis.spring.version>
         <testng.version>6.11</testng.version>
@@ -115,18 +114,22 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
+                <version>${commons.lang3.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${commons.http.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient -->
             <dependency>
-                <groupId>commons-httpclient</groupId>
-                <artifactId>commons-httpclient</artifactId>
-                <version>${commons.httpclient}</version>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient-cache</artifactId>
+                <version>${commons.http.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>fluent-hc</artifactId>
+                <version>${commons.http.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.sf.json-lib</groupId>

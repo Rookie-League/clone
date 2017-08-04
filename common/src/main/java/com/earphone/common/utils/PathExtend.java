@@ -16,6 +16,7 @@ import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
  * @createTime 14:37
  */
 public final class PathExtend {
+    private static final PathExtend PATH_EXTEND = new PathExtend();
 
     private static final String OS_LINUX = "linux";
     private static final String OS_WINDOWS = "window";
