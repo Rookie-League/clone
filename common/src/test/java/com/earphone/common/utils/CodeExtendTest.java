@@ -22,7 +22,7 @@ import static com.earphone.common.utils.PathExtend.classpath;
  */
 @Slf4j
 public class CodeExtendTest {
-    @Test
+    @Test(enabled = false)
     public void test() throws IOException {
         File dir = new File(classpath());
         File[] oldFiles = dir.listFiles();
