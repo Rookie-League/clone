@@ -1,21 +1,5 @@
 package com.nuoshenggufen.e_treasure.main.web.controller;
 
-import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.JSONObject;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.nuoshenggufen.e_treasure.main.model.domain.ChargeLogEntity;
 import com.nuoshenggufen.e_treasure.main.model.owncloud.domain.OwnCloudPreferences;
 import com.nuoshenggufen.e_treasure.main.model.service.ChargeLogService;
@@ -26,6 +10,19 @@ import com.nuoshenggufen.e_treasure.support.O;
 import com.nuoshenggufen.e_treasure.support.util.WeixinAppUtils;
 import com.nuoshenggufen.e_treasure.support.util.WeixinUtils;
 import com.webframework_springmvc.core.utils.IpUtil;
+import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 
