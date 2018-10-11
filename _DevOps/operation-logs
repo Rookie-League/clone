@@ -1,0 +1,27 @@
+3e43f32e63e346c1a3e569d36f49e0ef
+
+docker kill jenkins && docker rm jenkins
+
+docker rmi -f $(docker images -f "dangling=true" -q)
+
+docker run -itd --name jenkins -p 8080:8080 -p 50000:50000 -eJAVA_OPTS="-Duser.timezone=Asia/Shanghai" -v $PWD:/var/jenkins_home jenkins/jenkins:alpine
+
+
+docker kill teamcity-server-instance && docker rm teamcity-server-instance
+
+docker run -itd --name teamcity-server-instance  \
+-v /home/clone/docker-volumes/teamcity:/data/teamcity_server/datadir \
+-v /home/clone/docker-volumes/teamcity/logs:/opt/teamcity/logs  \
+-p 8111:8111 \
+jetbrains/teamcity-server
+
+
+docker pull jetbrains/teamcity-agent
+
+docker kill teamcity-agent-instance-a  && docker rm teamcity-agent-instance-a
+
+docker run -itd --name teamcity-agent-instance-a \
+ -e SERVER_URL="http://10.29.188.88:8111"  \
+ -e AGENT_NAME="agent-a"  \
+ -v /home/clone/docker-volumes/teamcity/agents/agent-a:/data/teamcity_agent/conf  \
+ jetbrains/teamcity-agent

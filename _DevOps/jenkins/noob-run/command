@@ -1,0 +1,48 @@
+#（接下来的步骤理论上应该在对应的应用服务器上执行，而且需要镜像服务器配合拉取镜像，不过目前只有一台，就都在一起执行）
+#如果一台服务器上部署多个结点，理论上复制下面的命令更改端口号即可（该命令是一次性的，一旦停止容器内容就会丢失）
+PROJECT_NAME=noob
+BASE_PATH=/home/clone/
+MYSQL_URL=jdbc:mysql://101.37.35.46:3306/clone?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=round
+MYSQL_HOST=101.37.35.46
+MYSQL_PORT=3306
+MYSQL_DB=clone
+MYSQL_USERNAME=clone
+MYSQL_PASSWORD=cloneable
+RABBITMQ_HOST=101.37.35.46
+RABBITMQ_PORT=15672
+RABBITMQ_USERNAME=clone
+RABBITMQ_PASSWORD=5c51321652a147a8adf00979eeb59dc5
+CONTAINER_PORT=8888
+MONITOR_PORT=9999
+NOOB_MAIN_ARGS="--spring.profiles.active=pre"
+NOOB_JAVA_OPTIONS=""
+####################################################################
+#从这里开始复制（修改复制后的NODE_ONE_PORT参数名，端口号及命令中的引用处）
+NODE_ONE_PORT=6666
+MONITOR_ONE_PORT=7777
+LOG_PATH=${BASE_PATH}docker-volumes/workspace/${PROJECT_NAME}/${NODE_ONE_PORT}
+if [ ! -d $LOG_PATH]; then
+  mkdir -p $LOG_PATH
+fi
+#容器名字为项目名+端口号
+CONTAINER_NAME="${PROJECT_NAME}${NODE_ONE_PORT}"
+#启动前先杀掉原有容器，即使没有也清理一下
+docker kill ${CONTAINER_NAME}
+#启动容器，设置为一次性的，并映射应用端口和日志路径到宿主机
+#启动需要带上依赖环境的参数，如数据库参数（其中url使用参数引入一直失败，只能写死）
+docker run -itd --rm --name ${CONTAINER_NAME} \
+    -v ${LOG_PATH}:/logs \
+    -e "MAIN_ARGS=${NOOB_MAIN_ARGS}" \
+    -e "JAVA_OPTIONS=${NOOB_JAVA_OPTIONS}" \
+    -e "${PROJECT_NAME}.rabbitmq.host=${RABBITMQ_HOST}" \
+    -e "${PROJECT_NAME}.rabbitmq.port=${RABBITMQ_PORT}" \
+    -e "${PROJECT_NAME}.rabbitmq.username=${RABBITMQ_USERNAME}" \
+    -e "${PROJECT_NAME}.rabbitmq.password=${RABBITMQ_PASSWORD}" \
+    -e "${PROJECT_NAME}.mysql.host=${MYSQL_HOST}" \
+    -e "${PROJECT_NAME}.mysql.port=${MYSQL_PORT}" \
+    -e "${PROJECT_NAME}.mysql.db=${MYSQL_DB}" \
+    -e "${PROJECT_NAME}.mysql.username=${MYSQL_USERNAME}" \
+    -e "${PROJECT_NAME}.mysql.password=${MYSQL_PASSWORD}" \
+    -p ${NODE_ONE_PORT}:${CONTAINER_PORT} \
+    -p ${MONITOR_ONE_PORT}:${MONITOR_PORT} ${PROJECT_NAME}
+

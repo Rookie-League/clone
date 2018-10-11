@@ -1,17 +1,15 @@
 package com.nuoshenggufen.e_treasure.main.web.wcpublic.process;
 
-import java.util.Date;
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.servlet.http.HttpServletRequest;
-
-import net.sf.json.JSONObject;
-
 import com.nuoshenggufen.e_treasure.main.web.wcpublic.message.response.TextMessage;
 import com.nuoshenggufen.e_treasure.support.N;
 import com.nuoshenggufen.e_treasure.support.util.BeanUtil;
 import com.nuoshenggufen.e_treasure.support.util.HttpUtil;
+import net.sf.json.JSONObject;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 public abstract class WechatProcessService {
     public abstract String doHandler ( HttpServletRequest request , Map<String, String> requestMap , String token )

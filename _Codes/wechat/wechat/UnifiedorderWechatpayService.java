@@ -1,17 +1,15 @@
 package com.nuoshenggufen.e_treasure.main.model.service.wechat;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import net.sf.json.JSONObject;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.nuoshenggufen.e_treasure.Constants;
 import com.nuoshenggufen.e_treasure.main.model.service.ConstantService;
 import com.nuoshenggufen.e_treasure.main.model.service.wechat.unifiedorder.DefaultUnifiedorderRequestWechatPay;
 import com.nuoshenggufen.e_treasure.support.util.CommonUtils;
+import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 统一预下单业务处理

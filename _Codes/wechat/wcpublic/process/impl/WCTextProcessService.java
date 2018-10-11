@@ -3,20 +3,6 @@
  */
 package com.nuoshenggufen.e_treasure.main.web.wcpublic.process.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import net.sf.json.JSONObject;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Maps;
 import com.nuoshenggufen.e_treasure.Constants;
 import com.nuoshenggufen.e_treasure.main.model.domain.ConstantEntity;
@@ -24,6 +10,17 @@ import com.nuoshenggufen.e_treasure.main.model.service.ConstantService;
 import com.nuoshenggufen.e_treasure.main.model.service.MemberChannelMapService;
 import com.nuoshenggufen.e_treasure.main.web.wcpublic.process.WechatProcessService;
 import com.nuoshenggufen.e_treasure.support.N;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * @description 公众号文本处理业务

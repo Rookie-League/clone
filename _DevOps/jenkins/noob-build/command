@@ -1,0 +1,75 @@
+#现在登录的应该是部署专用服务器（不过因为只有一台，其实都一样，但是为了方便扩展还是需要区分这样的概念）
+BASE_PATH=/home/clone/docker-volumes/
+PROJECT_PATH=${BASE_PATH}.jenkins/workspace
+MAVEN_PATH=${BASE_PATH}maven/.m2/repository
+#if [ ! -d $MAVEN_PATH]; then
+#  mkdir -p $MAVEN_PATH
+#fi
+#######开始构建程序包，spring boot项目应该是jar包###############
+MYSQL_HOST=101.37.35.46
+MYSQL_PORT=3306
+MYSQL_DB=clone
+MYSQL_USERNAME=clone
+MYSQL_PASSWORD=cloneable
+RABBITMQ_HOST=101.37.35.46
+RABBITMQ_PORT=15672
+RABBITMQ_USERNAME=clone
+RABBITMQ_PASSWORD=5c51321652a147a8adf00979eeb59dc5
+CONTAINER_PORT=8888
+JOB_NAME=noob-build
+PROJECT_NAME=noob
+MODULE_NAME=core
+#######################打包程序###########################
+##########报the input device is not a TTY去掉-t参数
+docker run -i --rm \
+    -v ${PROJECT_PATH}:/usr/src/maven-demo \
+    -v ${MAVEN_PATH}:/root/.m2/repository \
+    -e "${PROJECT_NAME}.rabbitmq.host=${RABBITMQ_HOST}" \
+    -e "${PROJECT_NAME}.rabbitmq.port=${RABBITMQ_PORT}" \
+    -e "${PROJECT_NAME}.rabbitmq.username=${RABBITMQ_USERNAME}" \
+    -e "${PROJECT_NAME}.rabbitmq.password=${RABBITMQ_PASSWORD}" \
+    -e "${PROJECT_NAME}.mysql.host=${MYSQL_HOST}" \
+    -e "${PROJECT_NAME}.mysql.port=${MYSQL_PORT}" \
+    -e "${PROJECT_NAME}.mysql.db=${MYSQL_DB}" \
+    -e "${PROJECT_NAME}.mysql.username=${MYSQL_USERNAME}" \
+    -e "${PROJECT_NAME}.mysql.password=${MYSQL_PASSWORD}" \
+    -w /usr/src/maven-demo/${JOB_NAME} maven:alpine \
+    mvn clean package
+#    mvn clean package -Dmaven.test.skip=true
+##########################################################
+###################准备开始构建镜像#########################
+if [ -d "${PROJECT_PATH}/${JOB_NAME}/docker_build"]; then
+  rm -rf ${PROJECT_PATH}/${JOB_NAME}/docker_build
+fi
+mkdir -p ${PROJECT_PATH}/${JOB_NAME}/docker_build
+cd ${PROJECT_PATH}/${JOB_NAME}/docker_build
+
+####################创建Dockerfile##########################
+cat >> Dockerfile << EOF
+FROM openjdk:8-jdk-alpine
+####################应用发布端口###########################
+EXPOSE 8888
+####################应用监控端口###########################
+EXPOSE 9999
+##################修正Alpine镜像时区问题####################
+##################无法修复JVM时区错误#####################
+#####启动时追加JVM参数-Duser.timezone=Asia/Shanghai可解决######
+#RUN apk add -U tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+ADD noob.jar noob.jar
+RUN sh -c 'touch /noob.jar'
+ENTRYPOINT ["sh","-c","java \${JAVA_OPTIONS} -Duser.timezone=Asia/Shanghai -Djava.security.egd=file:/dev/./urandom -jar /noob.jar \${MAIN_ARGS}"]
+EOF
+##########################################################
+
+cp -a ${PROJECT_PATH}/${JOB_NAME}/${MODULE_NAME}/target/${MODULE_NAME}.jar ${PROJECT_NAME}.jar
+docker kill $(docker ps -f name=${PROJECT_NAME} -q)
+###########开始构建镜像，最后有个点号（很重要）###############
+docker build -t ${PROJECT_NAME}:latest .
+####################清理无效的历史镜像######################
+docker rmi -f $(docker images -f "dangling=true" -q)
+#这里缺失上传镜像到私人仓库的步骤（因为只有一台服务器，暂时不需要）
+##########################################################
+rm -rf ${PROJECT_PATH}/${JOB_NAME}/docker_build
+#######################清理程序############################
+#启动阶段转移到另一个项目里执行了
+

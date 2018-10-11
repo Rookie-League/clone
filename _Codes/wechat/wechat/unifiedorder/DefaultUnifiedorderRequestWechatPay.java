@@ -1,11 +1,12 @@
 package com.nuoshenggufen.e_treasure.main.model.service.wechat.unifiedorder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.nuoshenggufen.e_treasure.main.model.service.wechat.base.DefaultWechatPay;
+import com.nuoshenggufen.e_treasure.support.util.CommonUtils;
+import com.nuoshenggufen.e_treasure.support.util.Dom4jExtUtils;
+import com.nuoshenggufen.e_treasure.support.util.MD5Util;
+import com.qymen.utillib.date.DateUtil;
+import com.qymen.utillib.http.HttpUtils;
+import com.qymen.utillib.number.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.dom4j.Document;
@@ -14,16 +15,11 @@ import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysql.jdbc.jdbc2.optional.SuspendableXAConnection;
-import com.nuoshenggufen.e_treasure.main.model.domain.ConstantEntity;
-import com.nuoshenggufen.e_treasure.main.model.service.wechat.base.DefaultWechatPay;
-import com.nuoshenggufen.e_treasure.support.N;
-import com.nuoshenggufen.e_treasure.support.util.CommonUtils;
-import com.nuoshenggufen.e_treasure.support.util.Dom4jExtUtils;
-import com.nuoshenggufen.e_treasure.support.util.MD5Util;
-import com.qymen.utillib.date.DateUtil;
-import com.qymen.utillib.http.HttpUtils;
-import com.qymen.utillib.number.NumberUtils;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *@see https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1

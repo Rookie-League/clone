@@ -1,0 +1,10 @@
+PROJECT_NAME=clone
+BASE_PATH=/home/${PROJECT_NAME}/
+MAVEN_PATH=${BASE_PATH}docker-volumes/maven
+PROJECT_PATH=${BASE_PATH}docker-volumes/.jenkins/workspace
+
+docker run --rm --name ${PROJECT_NAME} \
+    -v ${PROJECT_PATH}:/usr/src/maven-demo \
+    -v ${MAVEN_PATH}/.m2/repository:/root/.m2/repository \
+    -w /usr/src/maven-demo/${PROJECT_NAME} maven \
+    mvn clean install

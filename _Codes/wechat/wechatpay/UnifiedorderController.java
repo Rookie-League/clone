@@ -1,21 +1,5 @@
 package com.nuoshenggufen.e_treasure.main.web.controller.wechatpay;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
-import org.springframework.web.util.WebUtils;
-
 import com.nuoshenggufen.e_treasure.main.model.domain.ChargeLogEntity;
 import com.nuoshenggufen.e_treasure.main.model.service.ChargeLogService;
 import com.nuoshenggufen.e_treasure.main.model.service.MemberService;
@@ -29,6 +13,20 @@ import com.nuoshenggufen.e_treasure.support.N.PREDEFINED_CHANNEL_TYPE;
 import com.nuoshenggufen.e_treasure.support.O;
 import com.nuoshenggufen.e_treasure.support.util.CommonUtils;
 import com.webframework_springmvc.core.utils.IpUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.util.WebUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 

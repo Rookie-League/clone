@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.nuoshenggufen.e_treasure.main.model.service.wechat.unifiedorder.DefaultUnifiedorderRequestWechatPay;
-
 /**
  *微信支付业务处理类
  *@类名称：WechatPayService.java

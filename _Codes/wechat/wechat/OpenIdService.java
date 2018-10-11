@@ -1,17 +1,16 @@
 package com.nuoshenggufen.e_treasure.main.model.service.wechat;
 
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
 import com.nuoshenggufen.e_treasure.Constants;
 import com.nuoshenggufen.e_treasure.main.model.service.wechat.base.DefaultWechat;
 import com.nuoshenggufen.e_treasure.support.util.CommonUtils;
 import com.qymen.utillib.code.EncodeUtils;
 import com.qymen.utillib.http.HttpUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * 获取OpenId
